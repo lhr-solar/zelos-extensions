@@ -42,11 +42,12 @@ Zelos layouts bind each signal by `source`, `message` (event), `signal` (field) 
 - **Always read raw.** Photon's rollup levels average every signal in a bucket, index included. A 1 s `HSS_Channel_idx` of 13.5 or 7.58 mixes channels. At the 1 s, 100 ms and 10 s resolutions these messages are fetched separately at raw, in 5-minute pieces, and the averaged rows are discarded.
 - **Thinned per slot.** At those resolutions the last frame of each channel or tap per bucket is kept, so traces stay small while every slot stays correct. At raw resolution every frame is kept.
 - **Split per slot.** Each trace gets the "PDU Channel Live Splitter LilShah DBC" notebook's sources (`PDUChannels_LilShah`, `PDUChannelPower_LilShah`, `PDUChannelOverall_LilShah`): same fields, DBC labels and Overall math (total of each channel's latest power, highest output). The battery taps follow the same pattern: `BPSVoltageTaps_LilShah`, `BPSTemperatureTaps_LilShah` and `BPSTempADCTaps_LilShah` (`Tap_00`–`Tap_31`), plus `BPSVoltageOverall_LilShah` and `BPSTemperatureOverall_LilShah` (min, max, spread, which taps, faulted taps, taps reporting).
+- **MPPT power is computed the same way.** `MPPT_A/B/C_PowerMeasurements` aren't arrays, so their ordinary rows stay in the CAN source. Their raw frames are also read, thinned per MPPT, and turned into `MPPTPower_LilShah/Input` and `/Output` (`MPPT_A`, `MPPT_B`, `MPPT_C` in W = voltage × current from one frame), the same names as the "MPPT Power" notebook. Photon's DBC swaps the V/A unit labels on these voltage and current signals, but the values sit under the right names, so the power is correct.
 - **Live-workspace loads only thin.** In the live workspace the live notebooks own the `_LilShah` sources, so the extension doesn't write them there.
 
 Raw data also often has several frames of one message at the same timestamp, because Photon stamps a whole CANP batch with one time. Every signal lists those frames in the same order, so the k-th row of each signal at a timestamp is paired into the k-th frame instead of overwriting the earlier ones.
 
-`TRACE_FORMAT` in `loader.py` is part of the upload-record key. Bump it whenever what goes into a trace changes, so laptops stop reusing older traces.
+`TRACE_FORMAT` in `loader.py` (now 3) is part of the upload-record key. Bump it whenever what goes into a trace changes, so laptops stop reusing older traces.
 
 ### Reusing uploads
 

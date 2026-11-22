@@ -178,3 +178,72 @@ def test_array_messages_are_never_logged_from_averaged_levels(level):
     pump(client, S, Window(0, 4000), level, None, main, allowed_fields(schema, can_naming()), Progress(),
          can_naming(), router=make_router(schema, level, True), derived_sources={})
     assert main.records == []
+
+
+MPPT = ["MPPT_Input_Voltage", "MPPT_Input_Current", "MPPT_Output_Voltage", "MPPT_Output_Current"]
+
+
+def mppt_rows(unit: str, frames: list[tuple[int, float, float, float, float]]) -> list[Row]:
+    """(t_ms, in_V, in_A, out_V, out_A) frames as long-format rows."""
+    msg = f"MPPT_{unit}_PowerMeasurements"
+    return [Row(t, msg, sig, "", vals[j]) for j, sig in enumerate(MPPT) for t, *vals in frames]
+
+
+def test_mppt_power_matches_the_notebook():
+    from zelos_extension_photon.arrays import MpptPowerDeriver
+
+    out = MpptPowerDeriver("B").split(7, 0, {"MPPT_Input_Voltage": 120.0, "MPPT_Input_Current": 2.0,
+                                             "MPPT_Output_Voltage": 115.9, "MPPT_Output_Current": 0.5})
+    assert out == [("MPPTPower_LilShah", (7, "Input", {"MPPT_B": 240.0})),
+                   ("MPPTPower_LilShah", (7, "Output", {"MPPT_B": 57.95}))]
+    events = MpptPowerDeriver("A").sources()["MPPTPower_LilShah"]
+    assert {e: [(f.name, f.unit) for f in fs] for e, fs in events.items()} == {
+        "Input": [("MPPT_A", "W"), ("MPPT_B", "W"), ("MPPT_C", "W")],
+        "Output": [("MPPT_A", "W"), ("MPPT_B", "W"), ("MPPT_C", "W")]}
+
+
+def test_mppt_power_uses_raw_frames_and_leaves_can_rows_alone():
+    # 1 s level: averaged MPPT rows stay in the CAN source; power comes from raw frames (V and I from one frame)
+    averaged = mppt_rows("A", [(0, 100.0, 1.0, 110.0, 0.5), (1000, 100.0, 1.0, 110.0, 0.5)])
+    raw = mppt_rows("A", [(200, 100.0, 1.0, 110.0, 0.2), (800, 100.0, 3.0, 110.0, 0.8),
+                          (1500, 90.0, 2.0, 112.0, 0.4)])
+    client = FakeClient({2: averaged, 0: raw})
+    schema = {"MPPT_A_PowerMeasurements": dict.fromkeys(MPPT, "")}
+    main, power = FakeSource(), FakeSource()
+    declare(main, schema, naming=can_naming())
+    totals = pump(client, S, Window(0, 2000), 2, None, main, allowed_fields(schema, can_naming()), Progress(),
+                  can_naming(), router=make_router(schema, 2, True), derived_sources={"MPPTPower_LilShah": power})
+    assert [r[0] for r in main.records] == [0, 1_000_000_000]  # the CAN rows, not duplicated by raw frames
+    assert totals["array_frames"] == 0
+    # last raw frame per second: t=800 (100 V x 3 A, 110 V x 0.8 A) and t=1500 (90 x 2, 112 x 0.4)
+    assert [(r[0] // 1_000_000, r[1], round(r[2]["MPPT_A"], 6)) for r in power.records] == [
+        (800, "Input", 300.0), (800, "Output", 88.0), (1500, "Input", 180.0), (1500, "Output", 44.8)]
+
+
+def test_mppt_power_at_raw_comes_from_the_main_stream():
+    raw = mppt_rows("C", [(200, 100.0, 1.0, 110.0, 0.2), (200, 101.0, 1.0, 111.0, 0.3)])
+    client = FakeClient({0: raw})
+    schema = {"MPPT_C_PowerMeasurements": dict.fromkeys(MPPT, "")}
+    main, power = FakeSource(), FakeSource()
+    declare(main, schema, naming=can_naming())
+    totals = pump(client, S, Window(0, 2000), 0, None, main, allowed_fields(schema, can_naming()), Progress(),
+                  can_naming(), router=make_router(schema, 0, True), derived_sources={"MPPTPower_LilShah": power})
+    assert len(client.calls) == 1 and len(main.records) == 2 and totals["rows"] == 8
+    assert [round(r[2]["MPPT_C"], 6) for r in power.records if r[1] == "Output"] == [22.0, 33.3]
+
+
+def test_write_trace_includes_mppt_power(tmp_path):
+    rows = mppt_rows("A", [(500, 100.0, 1.0, 110.0, 0.5)])
+    client = FakeClient({5: rows, 2: rows, 0: rows})
+    out = write_trace(client, S, Window(0, 4000), 2, None, tmp_path / "t.trz", Progress())
+    assert out["split_sources"] == ["MPPTPower_LilShah"] and out["split_records"] == 2
+
+
+def test_live_loads_do_not_compute_mppt_power():
+    rows = mppt_rows("A", [(500, 100.0, 1.0, 110.0, 0.5)])
+    client = FakeClient({5: rows, 2: rows, 0: rows})
+    made: dict[str, FakeSource] = {}
+    res = LiveLoader(lambda: client, lambda name: made.setdefault(name, FakeSource())).load(
+        S, Window(0, 4000), 2, None, Progress())
+    assert res["split_records"] == 0 and list(made) == ["photon-20260927-211337-00"]
+    assert len(client.calls) == 2  # discovery + the 1 s load; no extra raw fetch

@@ -45,7 +45,8 @@ CAN_MESSAGE_EVENT_TYPE = "zelos.can.message.v1"
 
 # Bump when what goes into a trace changes, so the per-laptop upload record stops reusing older traces.
 # 2: array messages read raw and split per slot; frames sharing a timestamp no longer dropped.
-TRACE_FORMAT = 2
+# 3: MPPTPower_LilShah (MPPT input/output power) computed per raw frame.
+TRACE_FORMAT = 3
 
 
 @dataclass(frozen=True)
@@ -204,13 +205,16 @@ def pump(client: PhotonClient, s: CatalogSession, window: Window, level: int, si
         progress.check()
         progress.update(phase=f"loading {i + 1}/{len(parts)}")
         diverted: list[Row] = []
+        computed = (router.present - ARRAY_MESSAGES) if router is not None else set()
 
-        def main_rows(rows: Iterable[Row], sink: list[Row] = diverted) -> Iterable[Row]:
+        def main_rows(rows: Iterable[Row], sink: list[Row] = diverted, also: set[str] = computed) -> Iterable[Row]:
             for r in rows:
                 if r.message in ARRAY_MESSAGES:
                     if level == 0:
                         sink.append(r)
                     continue  # never use an averaged array row
+                if level == 0 and r.message in also:
+                    sink.append(r)  # computed messages (MPPT power): logged as usual and derived from
                 yield r
 
         recs, seen, dropped = group_rows(main_rows(client.stream_rows(s.id, part.from_ms, part.to_ms, level, signals)),
@@ -219,7 +223,7 @@ def pump(client: PhotonClient, s: CatalogSession, window: Window, level: int, si
         if router is not None and router.present:
             if level == 0:
                 frames = pair_frames(diverted, router.present)
-                seen += len(diverted)
+                seen += sum(1 for r in diverted if r.message in ARRAY_MESSAGES)
             else:
                 frames = []
                 wanted = [f"{m}.{sig}" for m in sorted(router.present) for sig in router.signals.get(m, [])]

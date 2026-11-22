@@ -14,6 +14,8 @@ the way the "PDU Channel Live Splitter LilShah DBC" notebook does for live CAN d
     BPSTemperatureTaps_LilShah/Tap_NN     temperature [degC], fault (DBC label), age [ms]
     BPSTemperatureOverall_LilShah/Overall the same summary for temperature
     BPSTempADCTaps_LilShah/Tap_NN         adc (raw thermistor reading)
+    MPPTPower_LilShah/Input, /Output      MPPT_A/B/C [W] = voltage * current (not an array, but computed
+                                          per raw frame the same way, as the "MPPT Power" notebook does)
 
 Photon's 1 s and 100 ms levels average each signal over a bucket, including the index (a 1 s
 `HSS_Channel_idx` of 13.5 mixes channels), so these messages are always read raw and then thinned
@@ -84,9 +86,19 @@ class ArraySplitter:
     """One indexed message: slot naming, the derived sources, and the per-slot state behind Overall."""
 
     message: str
-    index_signal: str
+    index_signal: str | None  # None: one slot per message (a computed message, not an array)
     slots: int
     slot_name: str  # "Channel" or "Tap"
+    # Array messages are rebuilt from raw frames in the CAN source too (their averaged rows are useless);
+    # computed messages keep their ordinary rows and only contribute derived sources.
+    replaces_message: bool = True
+
+    def slot_of(self, values: dict[str, float]) -> int | None:
+        if self.index_signal is None:
+            return 0
+        if self.index_signal not in values:
+            return None
+        return int(round(values[self.index_signal]))
 
     def __init__(self) -> None:
         self.latest: dict[int, dict[str, Any]] = {}
@@ -209,9 +221,44 @@ class BpsTempAdcSplitter(ArraySplitter):
                              {"adc": float(v.get("BPS_Temperature_Tap_ADC", math.nan))}))]
 
 
-SPLITTERS: dict[str, type[ArraySplitter]] = {
+class MpptPowerDeriver(ArraySplitter):
+    """MPPT input and output power = voltage x current, per frame, as the "MPPT Power" notebook computes it.
+
+    Written as `MPPTPower_LilShah/Input` and `/Output` with one field per MPPT (`MPPT_A`, `MPPT_B`, `MPPT_C`);
+    each frame fills its own MPPT's field. Computed from raw frames, so voltage and current come from the
+    same frame rather than from two separately averaged values. (Photon's DBC swaps the V/A unit labels on
+    the MPPT voltage/current signals; the values sit under the right names, so the product is right.)
+    """
+
+    index_signal, slots, slot_name, replaces_message = None, 1, "MPPT", False
+    SOURCE = "MPPTPower_LilShah"
+    UNITS = ("A", "B", "C")
+
+    def __init__(self, unit: str) -> None:
+        super().__init__()
+        self.unit = unit
+        self.message = f"MPPT_{unit}_PowerMeasurements"
+
+    def sources(self):
+        fields = [F(f"MPPT_{u}", DataType.Float64, "W") for u in self.UNITS]
+        return {self.SOURCE: {"Input": list(fields), "Output": list(fields)}}
+
+    def split(self, t_ns, idx, v):
+        out = []
+        for kind in ("Input", "Output"):
+            volts, amps = v.get(f"MPPT_{kind}_Voltage"), v.get(f"MPPT_{kind}_Current")
+            if volts is None or amps is None:
+                continue
+            out.append((self.SOURCE, (t_ns, kind, {f"MPPT_{self.unit}": float(volts) * float(amps)})))
+        return out
+
+
+SPLITTERS: dict[str, Any] = {
     s.message: s for s in (PduSplitter, BpsVoltageSplitter, BpsTemperatureSplitter, BpsTempAdcSplitter)}
-ARRAY_MESSAGES = frozenset(SPLITTERS)
+ARRAY_MESSAGES = frozenset(SPLITTERS)  # indexed messages: averaged rows are useless, rebuilt from raw
+COMPUTED: dict[str, Any] = {f"MPPT_{u}_PowerMeasurements": (lambda u=u: MpptPowerDeriver(u))
+                            for u in MpptPowerDeriver.UNITS}
+DERIVED_MESSAGES = ARRAY_MESSAGES | frozenset(COMPUTED)  # everything read raw for derived sources
 
 
 @dataclass
@@ -230,8 +277,10 @@ class ArrayRouter:
     _kept: dict[tuple[str, int], int] = field(default_factory=dict)  # (message, slot) -> last bucket written
 
     def __post_init__(self) -> None:
-        self.present = set(self.present) & ARRAY_MESSAGES
-        self.splitters = {m: SPLITTERS[m]() for m in self.present}
+        # Computed messages only matter when deriving; arrays are always handled (never averaged).
+        wanted = DERIVED_MESSAGES if self.derive else ARRAY_MESSAGES
+        self.present = set(self.present) & wanted
+        self.splitters = {m: (SPLITTERS.get(m) or COMPUTED[m])() for m in self.present}
 
     def derived_sources(self) -> dict[str, dict[str, list[TraceEventFieldMetadata]]]:
         out: dict[str, dict[str, list[TraceEventFieldMetadata]]] = {}
@@ -249,9 +298,9 @@ class ArrayRouter:
         last: dict[tuple[str, int, int], Frame] = {}
         for f in frames:
             sp = self.splitters.get(f.message)
-            if sp is None or sp.index_signal not in f.values:
+            idx = sp.slot_of(f.values) if sp is not None else None
+            if idx is None:
                 continue
-            idx = int(round(f.values[sp.index_signal]))
             last[(f.message, idx, f.t_ms // bucket)] = f
         kept = []
         for (m, idx, b), f in last.items():
@@ -269,11 +318,12 @@ class ArrayRouter:
         raw_out = []
         for f in kept:
             sp = self.splitters.get(f.message)
-            if sp is None or sp.index_signal not in f.values:
+            idx = sp.slot_of(f.values) if sp is not None else None
+            if idx is None:
                 continue
-            raw_out.append((f.message, f.values, f.t_ms))
+            if sp.replaces_message:
+                raw_out.append((f.message, f.values, f.t_ms))
             if self.derive:
-                idx = int(round(f.values[sp.index_signal]))
                 for src, rec in sp.split(f.t_ms * 1_000_000, idx, f.values):
                     derived.setdefault(src, []).append(rec)
         return raw_out, derived
