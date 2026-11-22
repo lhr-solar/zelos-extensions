@@ -2,8 +2,8 @@
 
 A Zelos extension that brings Longhorn Racing Solar's **Photon** telemetry server into the Zelos app. Use it to:
 - browse every car session Photon has stored,
-- save any session or window as a trace to open in Zelos,
-- upload hand-picked sessions to Zelos Cloud for sharing and Zelos AI. Every upload is tagged **Photon**.
+- load any session or window into Zelos Cloud as a trace tagged **Photon**, ready to view, share and analyze with Zelos AI,
+- or save it as a private local `.trz` file instead.
 
 It only reads Photon, through the same endpoints photon.html uses. It never changes the shared Photon backend: no source, DBC or timeline changes.
 
@@ -12,8 +12,7 @@ It only reads Photon, through the same endpoints photon.html uses. It never chan
 | Action | What it does | Zelos AI |
 |---|---|---|
 | **List Sessions** | Lists Photon's stored sessions, grouped by local day (newest first), with start time, length, samples and whether video exists | Runs without asking (read-only) |
-| **Load Session** | Pick a day and a session, plus optional resolution, start offset, duration and signals. Saves a `.trz` trace file in *Documents/Photon Traces*, which you open in Zelos. Signals appear as `photon/<Message>.<Signal>` | Asks first |
-| **Upload Session** | Same choices. Builds the trace, seals it as TRZ2, and uploads it to Zelos Cloud **tagged `Photon`** plus any extra tags you name. Returns the share link and, by default, opens it in the app | Asks first |
+| **Load Session** | Pick a day and a session, plus optional resolution, start offset, duration and signals. By default it builds the trace, seals it as TRZ2, uploads it to Zelos Cloud **tagged `Photon`** (plus any extra tags), opens it in the app and returns the share link. Loading the same thing again on this laptop reuses that trace. *Destination* can be *Trace file* (a local `.trz` in *Documents/Photon Traces*) or *Live workspace* (recent data only). Signals appear as `photon/<Message>.<Signal>` | Asks first |
 | **Job Status** | Progress and the result of the running or last load/upload | Read-only |
 | **Cancel Job** | Stops the running load or upload after its current chunk | Asks first |
 
@@ -23,17 +22,21 @@ It only reads Photon, through the same endpoints photon.html uses. It never chan
 - `raw`: short windows only (a whole session raw is about 6 GB of CSV; transfers over about 1.5 GB need *Allow large transfers*).
 - `10 s`: overviews.
 
-Load and Upload return within 4 minutes. A longer job keeps running, and Job Status reports how it finished.
+Load Session returns within 4 minutes. A longer job keeps running, and Job Status reports how it finished.
 
-### Why Load Session writes a file instead of streaming live
+### Why not stream history into the live workspace
 
 The Zelos app keeps live data in memory and **prunes samples older than about 8 hours** (by sample time) every minute. Photon history is weeks or months old, so it would vanish within a minute of loading.
 
 *Destination → Live workspace (recent data only)* exists for data from the last 7.5 hours, such as today's drive. The action refuses older windows.
 
+### Reusing uploads
+
+Zelos has no API to list or search Cloud traces, so the extension can't tell whether a teammate already uploaded a session. Instead each laptop keeps a record in `~/.photon-zelos/uploads.json`, keyed by org, session, resolution, window and signal list. A repeat load reopens the recorded trace, and *Upload again* bypasses the record. Trace names follow one pattern, `<local date time> <session id> (<resolution>)[ from HH:MM N min]`, so duplicates are easy to spot in the console.
+
 ### The Photon tag
 
-Zelos never creates tags on upload. If an upload fails with *"Zelos Cloud has no 'Photon' tag"*, an org owner needs to create the tag once in [console2.zeloscloud.io](https://console2.zeloscloud.io) → Tags.
+Zelos never creates tags on upload. If a Cloud load fails with *"Zelos Cloud has no 'Photon' tag"*, an org owner needs to create the tag once in [console2.zeloscloud.io](https://console2.zeloscloud.io) → Tags.
 
 ## Settings
 
@@ -56,8 +59,10 @@ Photon (photon-dev.lhrsolar.org, Basic auth)
         v  1. discover the session's messages/signals at the coarsest level (schemas can't grow later)
         v  2. stream the window in chunks (1 min raw ... 60 min at 1 s), group rows by (message, t_ms)
         v  3. one Zelos event per CAN message, one Float64 field per signal, DBC unit
-TraceWriter (.trz, own namespace) --Load--> Documents/Photon Traces/<start> <session> <res>.trz
-                                  --Upload--> agent seals TRZ2 -> agent.upload(tags=["Photon", ...]) -> zelos://open
+TraceWriter (.trz, own namespace)
+   --Zelos Cloud (default)--> agent seals TRZ2 -> agent.upload(tags=["Photon", ...]) -> record in
+                              ~/.photon-zelos/uploads.json -> zelos://open   (a repeat load just reopens it)
+   --Trace file-------------> Documents/Photon Traces/<start> <session> <res>.trz
 ```
 
 ## Known data caveats (Photon side)

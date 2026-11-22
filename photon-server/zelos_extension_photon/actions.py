@@ -38,6 +38,7 @@ from .sessions import (
     session_label,
     session_summary,
 )
+from .uploads import UploadRecord, upload_key
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,8 @@ LARGE_MB = 1500.0  # refuse bigger loads unless allow_large is ticked
 JOB_WAIT_S = 240.0  # under the five minutes an action caller waits
 # The app's agent prunes live samples older than ~8 h (by sample time) every minute.
 LIVE_MAX_AGE_H = 7.5
-DESTINATIONS = ["Trace file", "Live workspace (recent data only)"]
+DEST_CLOUD, DEST_FILE, DEST_LIVE = "Zelos Cloud", "Trace file", "Live workspace (recent data only)"
+DESTINATIONS = [DEST_CLOUD, DEST_FILE, DEST_LIVE]
 
 
 class State:
@@ -61,6 +63,8 @@ class State:
         self.agent_factory = zelos_sdk.connect
         self.opener = open_cloud_trace
         self.workdir = Path(os.environ["ZELOS_DATA_DIR"]) if os.environ.get("ZELOS_DATA_DIR") else None
+        # In the home folder, not the per-version extension data dir, so it survives reinstalls.
+        self.uploads = UploadRecord(Path.home() / ".photon-zelos" / "uploads.json")
 
     @property
     def traces_dir(self) -> Path:
@@ -212,8 +216,8 @@ def _prepare(session: str, resolution: str | None, start_offset_min: float | Non
 
 @action("List Sessions",
         "Lists the car sessions stored in Photon, newest day first: id, local start time, length in "
-        "minutes, sample count and whether video exists. Use a session id from here with Load Session "
-        "or Upload Session.", read_only=True, timeout=60)
+        "minutes, sample count and whether video exists. Use a session id from here with Load Session.",
+        read_only=True, timeout=60)
 @action.text("day", title="Day (YYYY-MM-DD)", required=False,
              description="Only this local day. Empty lists every day.")
 @action.integer("limit_days", title="Max days", required=False, default=10, minimum=1, maximum=400)
@@ -234,75 +238,84 @@ def list_sessions(day: str | None = None, limit_days: int = 10, refresh: bool = 
 
 
 @action("Load Session",
-        "Saves a Photon session (or a window of it) as a local .trz trace file to open in Zelos, with signals "
-        "under photon/<Message>.<Signal>. 'Live workspace' streams it into the live view instead, but Zelos "
-        f"keeps live data for only about 8 hours, so that works only for data under {LIVE_MAX_AGE_H:g} h old.",
+        f"Loads a Photon session (or a window of it) into Zelos. By default it uploads it to Zelos Cloud as a trace "
+        f"tagged '{PHOTON_TAG}' and opens it in the app; loading the same thing again on this laptop reuses that "
+        "trace. 'Trace file' saves a local .trz instead. 'Live workspace' streams into the live view, but Zelos "
+        f"keeps live data for only about 8 hours, so that works only for data under {LIVE_MAX_AGE_H:g} h old. "
+        "Signals appear as photon/<Message>.<Signal>.",
         timeout=1800, submit_text="Load")
+@action.boolean("new_upload", title="Upload again", required=False, default=False,
+                description="Zelos Cloud only: upload a fresh trace even if this laptop already uploaded this one.")
+@action.boolean("open_in_app", title="Open in Zelos when done", required=False, default=True,
+                description="Zelos Cloud only.")
+@action.text("extra_tags", title="Extra tags", required=False,
+             description=f"Zelos Cloud only: comma-separated existing org tags, added to '{PHOTON_TAG}'.")
+@action.text("name", title="Trace name", required=False,
+             description="Zelos Cloud only. Defaults to '<local date time> <session id> (<resolution>)'.")
 @action.select("destination", title="Destination", choices=DESTINATIONS, required=False,
-               description="Trace file works for any session. Live workspace only for data from the last "
-                           f"{LIVE_MAX_AGE_H:g} hours.")
+               description="Zelos Cloud (default): shared with the lhrs org, tagged Photon. Trace file: a local "
+                           f".trz. Live workspace: only data from the last {LIVE_MAX_AGE_H:g} hours.")
 @_selection_fields
 def load_session(session: str, day: str | None = None, resolution: str | None = None,
                  start_offset_min: float | None = 0, duration_min: float | None = None,
                  signals: str | None = None, allow_large: bool | None = False,
-                 destination: str | None = None) -> dict[str, Any]:
+                 destination: str | None = None, name: str | None = None, extra_tags: str | None = None,
+                 open_in_app: bool | None = True, new_upload: bool | None = False) -> dict[str, Any]:
     s, level, window, sig = _prepare(session, resolution, start_offset_min, duration_min, signals, allow_large)
     res_name = resolution or STATE.default_resolution
-    live = (destination or DESTINATIONS[0]) == DESTINATIONS[1]
-    if live:
+    dest = destination or DESTINATIONS[0]
+    if dest not in DESTINATIONS:
+        raise ValueError(f"Unknown destination {dest!r}. Choose one of {DESTINATIONS}")
+    whole = window.from_ms == s.min_ms and window.to_ms > s.max_ms
+    if dest == DEST_LIVE:
         age_h = (time.time() * 1000 - window.to_ms) / 3600_000
         if age_h > LIVE_MAX_AGE_H:
             raise ValueError(f"That window ended {age_h:.0f} h ago. Zelos drops live data older than about 8 h "
-                             f"within a minute, so load it as a Trace file instead.")
+                             f"within a minute, so load it to Zelos Cloud or a Trace file instead.")
+
+    common = {"session": s.id, "resolution": res_name, "window_start": local_start_iso(window.from_ms),
+              "window_min": round(window.duration_s / 60, 1)}
+    org = STATE.config.get("organization") or None
+
+    if dest == DEST_CLOUD:
+        key = upload_key(s.id, level, window.from_ms, window.to_ms, sig, org)
+        prior = None if new_upload else STATE.uploads.get(key)
+        if prior and prior.get("trace_id"):
+            opened = bool(open_in_app) and _open(prior.get("organization") or org, prior)
+            return {**common, "destination": "zelos cloud", "reused": True, "opened_in_app": opened,
+                    "note": "This laptop already uploaded this. Tick 'Upload again' for a fresh trace.", **prior}
 
     def job() -> dict[str, Any]:
         t0 = time.monotonic()
-        common = {"session": s.id, "resolution": res_name, "window_start": local_start_iso(window.from_ms),
-                  "window_min": round(window.duration_s / 60, 1)}
-        if live:
+        if dest == DEST_LIVE:
             res = STATE.live.load(s, window, level, sig, STATE.progress)
             return {**common, "destination": "live workspace", "seconds": round(time.monotonic() - t0, 1), **res}
-        path = STATE.trace_path(s, res_name, whole=window.from_ms == s.min_ms and window.to_ms > s.max_ms,
-                                window=window)
-        res = write_trace(STATE.client(), s, window, level, sig, path, STATE.progress)
-        return {**common, "destination": "trace file", "path": str(path),
-                "size_mb": round(path.stat().st_size / 1e6, 1), "seconds": round(time.monotonic() - t0, 1),
-                "next": "Open this .trz file in the Zelos app.", **res}
+        if dest == DEST_FILE:
+            path = STATE.trace_path(s, res_name, whole=whole, window=window)
+            res = write_trace(STATE.client(), s, window, level, sig, path, STATE.progress)
+            return {**common, "destination": "trace file", "path": str(path),
+                    "size_mb": round(path.stat().st_size / 1e6, 1), "seconds": round(time.monotonic() - t0, 1),
+                    "next": "Open this .trz in Zelos: Open trace on Home, or Data Sources -> Add trace -> File.",
+                    **res}
+        label = name or (f"{local_start(s, STATE.tz).strftime('%Y-%m-%d %H:%M %Z')} {s.id} ({res_name})"
+                         + ("" if whole else f" from {dt.datetime.fromtimestamp(window.from_ms / 1000, STATE.tz):%H:%M}"
+                                             f" {window.duration_s / 60:.0f} min"))
+        res = build_and_upload(STATE.client(), STATE.agent_factory(), s, window, level, sig, label,
+                               _parse_list(extra_tags), org, STATE.progress, STATE.workdir)
+        entry = {"url": res.get("url"), "trace_id": res.get("trace_id"), "name": res.get("name"),
+                 "tags": res.get("tags"), "organization": org or _org_from_url(res.get("url"))}
+        if entry["trace_id"]:
+            STATE.uploads.put(upload_key(s.id, level, window.from_ms, window.to_ms, sig, org), entry)
+        opened = bool(open_in_app) and _open(entry["organization"], entry)
+        return {**common, "destination": "zelos cloud", "reused": False, "opened_in_app": opened,
+                "seconds": round(time.monotonic() - t0, 1), **res}
 
     return STATE.run_job("load", s.id, job)
 
 
-@action("Upload Session",
-        f"Uploads a Photon session (or a window of it) to Zelos Cloud as a new trace, always tagged "
-        f"'{PHOTON_TAG}'. Returns the share link.", timeout=1800, submit_text="Upload")
-@action.boolean("open_in_app", title="Open in Zelos when done", required=False, default=True)
-@action.text("extra_tags", title="Extra tags", required=False,
-             description=f"Optional comma-separated existing org tags, added to '{PHOTON_TAG}'.")
-@action.text("name", title="Trace name", required=False,
-             description="Defaults to '<local date time> <session id> (<resolution>)'.")
-@_selection_fields
-def upload_session(session: str, day: str | None = None, resolution: str | None = None,
-                   start_offset_min: float | None = 0, duration_min: float | None = None,
-                   signals: str | None = None, allow_large: bool | None = False, name: str | None = None,
-                   extra_tags: str | None = None, open_in_app: bool | None = True) -> dict[str, Any]:
-    s, level, window, sig = _prepare(session, resolution, start_offset_min, duration_min, signals, allow_large)
-    res_name = resolution or STATE.default_resolution
-    label = name or (f"{local_start(s, STATE.tz).strftime('%Y-%m-%d %H:%M %Z')} {s.id} ({res_name})"
-                     + ("" if window.from_ms == s.min_ms and window.to_ms > s.max_ms else " window"))
-
-    def job() -> dict[str, Any]:
-        t0 = time.monotonic()
-        res = build_and_upload(STATE.client(), STATE.agent_factory(), s, window, level, sig, label,
-                               _parse_list(extra_tags), STATE.config.get("organization") or None,
-                               STATE.progress, STATE.workdir)
-        opened = False
-        if open_in_app and res.get("trace_id"):
-            org = STATE.config.get("organization") or _org_from_url(res.get("url"))
-            opened = bool(org) and STATE.opener(org, res["trace_id"])
-        return {"session": s.id, "resolution": res_name, "seconds": round(time.monotonic() - t0, 1),
-                "opened_in_app": opened, **res}
-
-    return STATE.run_job("upload", s.id, job)
+def _open(org: str | None, entry: dict[str, Any]) -> bool:
+    org = org or _org_from_url(entry.get("url"))
+    return bool(org and entry.get("trace_id")) and bool(STATE.opener(org, entry["trace_id"]))
 
 
 @action("Job Status", "Progress of the running (or last) load or upload.", read_only=True, timeout=10)

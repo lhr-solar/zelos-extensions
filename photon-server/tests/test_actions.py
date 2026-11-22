@@ -6,14 +6,17 @@ import pytest
 
 from zelos_extension_photon import ACTION_PREFIX, actions
 from zelos_extension_photon.actions import STATE
+from zelos_extension_photon.uploads import UploadRecord
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture(autouse=True)
-def stub_catalog(catalog, monkeypatch):
+def stub_catalog(catalog, monkeypatch, tmp_path):
     STATE.configure({"timezone": "America/Chicago", "default_resolution": "1 s"})
     monkeypatch.setattr(STATE, "catalog", lambda refresh=False: catalog)
+    # never touch the real ~/.photon-zelos record from tests
+    monkeypatch.setattr(STATE, "uploads", UploadRecord(tmp_path / "uploads.json"))
     yield
 
 
@@ -33,9 +36,9 @@ def test_registered_actions():
             names.append(name)
 
     actions.register_actions(Reg())
-    assert names == ["cancel_job", "job_status", "list_sessions", "load_session", "upload_session"]
+    assert names == ["cancel_job", "job_status", "list_sessions", "load_session"]
     assert actions.list_sessions._action.read_only and actions.job_status._action.read_only
-    assert not actions.load_session._action.read_only and not actions.upload_session._action.read_only
+    assert not actions.load_session._action.read_only
 
 
 def test_list_sessions_groups_days():
@@ -126,11 +129,11 @@ def test_trace_paths_are_readable_and_distinct(catalog, tmp_path):
 
 def test_live_destination_refuses_old_data(monkeypatch):
     monkeypatch.setattr(STATE, "run_job", lambda *a, **k: pytest.fail("should not start a job"))
-    with pytest.raises(ValueError, match="Trace file instead"):
-        actions.load_session("20260723-164704-00", destination=actions.DESTINATIONS[1])
+    with pytest.raises(ValueError, match="Zelos Cloud or a Trace file instead"):
+        actions.load_session("20260723-164704-00", destination=actions.DEST_LIVE)
 
 
-def test_load_defaults_to_a_trace_file(monkeypatch, tmp_path):
+def test_load_to_a_trace_file(monkeypatch, tmp_path):
     STATE.configure({"timezone": "America/Chicago", "traces_dir": str(tmp_path)})
     written = {}
 
@@ -141,20 +144,58 @@ def test_load_defaults_to_a_trace_file(monkeypatch, tmp_path):
 
     monkeypatch.setattr(actions, "write_trace", fake_write)
     monkeypatch.setattr(STATE, "client", lambda: None)
-    out = actions.load_session("20261017-012401-00 | label", resolution="100 ms")
+    out = actions.load_session("20261017-012401-00 | label", resolution="100 ms", destination="Trace file")
     assert out["destination"] == "trace file" and written["level"] == 1
     assert out["path"] == str(written["path"]) and written["path"].parent == tmp_path
 
 
-def test_upload_opens_the_new_trace_in_the_app(monkeypatch):
+@pytest.fixture
+def fake_cloud(monkeypatch):
     STATE.configure({"timezone": "America/Chicago", "organization": "lhrs"})
-    opened = []
-    monkeypatch.setattr(STATE, "opener", lambda org, tid: opened.append((org, tid)) or True)
+    calls = {"uploads": [], "opened": []}
+    monkeypatch.setattr(STATE, "opener", lambda org, tid: calls["opened"].append((org, tid)) or True)
     monkeypatch.setattr(STATE, "client", lambda: None)
     monkeypatch.setattr(STATE, "agent_factory", lambda: None)
-    monkeypatch.setattr(actions, "build_and_upload", lambda *a, **k: {
-        "url": "https://console2.zeloscloud.io/lhrs/traces/abc", "trace_id": "abc", "tags": ["Photon"]})
-    out = actions.upload_session("20261017-012401-00 | label")
-    assert out["opened_in_app"] and opened == [("lhrs", "abc")] and out["tags"] == ["Photon"]
-    out = actions.upload_session("20261017-012401-00 | label", open_in_app=False)
-    assert not out["opened_in_app"] and len(opened) == 1
+
+    def fake_upload(client, agent, s, window, level, sig, name, extra_tags, org, progress, workdir):
+        n = len(calls["uploads"]) + 1
+        calls["uploads"].append({"name": name, "tags": ["Photon", *extra_tags], "org": org, "level": level})
+        return {"url": f"https://console2.zeloscloud.io/lhrs/traces/t{n}", "trace_id": f"t{n}", "name": name,
+                "tags": ["Photon", *extra_tags]}
+
+    monkeypatch.setattr(actions, "build_and_upload", fake_upload)
+    return calls
+
+
+def test_load_defaults_to_zelos_cloud_and_opens_it(fake_cloud):
+    out = actions.load_session("20261017-012401-00 | label")
+    assert out["destination"] == "zelos cloud" and not out["reused"]
+    assert out["tags"] == ["Photon"] and out["opened_in_app"]
+    assert fake_cloud["opened"] == [("lhrs", "t1")]
+    assert fake_cloud["uploads"][0]["name"] == "2026-10-16 20:24 CDT 20261017-012401-00 (1 s)"
+
+
+def test_loading_the_same_thing_again_reuses_the_trace(fake_cloud):
+    first = actions.load_session("20261017-012401-00 | label")
+    again = actions.load_session("20261017-012401-00 | other label text")
+    assert again["reused"] and again["trace_id"] == first["trace_id"] == "t1"
+    assert len(fake_cloud["uploads"]) == 1 and fake_cloud["opened"] == [("lhrs", "t1"), ("lhrs", "t1")]
+    # a different resolution or window is a different trace
+    actions.load_session("20261017-012401-00 | label", resolution="100 ms")
+    actions.load_session("20261017-012401-00 | label", start_offset_min=1, duration_min=2)
+    assert len(fake_cloud["uploads"]) == 3
+    assert fake_cloud["uploads"][2]["name"].endswith("(1 s) from 20:25 2 min")
+    # Upload again forces a fresh trace
+    fresh = actions.load_session("20261017-012401-00 | label", new_upload=True)
+    assert not fresh["reused"] and fresh["trace_id"] == "t4"
+
+
+def test_cloud_load_without_opening_and_with_extra_tags(fake_cloud):
+    out = actions.load_session("20261017-012401-00 | label", open_in_app=False, extra_tags="Brainerd, dyno")
+    assert not out["opened_in_app"] and fake_cloud["opened"] == []
+    assert out["tags"] == ["Photon", "Brainerd", "dyno"]
+
+
+def test_unknown_destination_is_refused(fake_cloud):
+    with pytest.raises(ValueError, match="Unknown destination"):
+        actions.load_session("20261017-012401-00 | label", destination="Somewhere")

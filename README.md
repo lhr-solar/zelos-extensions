@@ -4,7 +4,7 @@
 
 | Folder | Extension | What it does |
 |---|---|---|
-| [`photon-server/`](photon-server/) | **Photon** | Browse the car sessions stored on the Photon telemetry server, open them in Zelos, and upload them to Zelos Cloud (tagged `Photon`) to share and analyze with Zelos AI |
+| [`photon-server/`](photon-server/) | **Photon** | Browse the car sessions stored on the Photon telemetry server and load any of them into Zelos Cloud (tagged `Photon`) to view, share and analyze with Zelos AI |
 
 ---
 
@@ -33,26 +33,31 @@ Run **List Sessions**. It shows the stored car sessions grouped by day (newest f
 ### 2. Open a session
 Run **Load Session**:
 - **Day**, then **Session**: the dropdowns list what Photon has.
-- **Resolution**: `1 s` for a whole session (a 3.6 h run loads in about 20 s), `100 ms` for a few minutes of detail, `raw` only for short windows.
+- **Resolution**: `1 s` for a whole session, `100 ms` for a few minutes of detail, `raw` only for short windows.
 - **Start offset / Duration** (minutes, optional): load just part of a run.
 - **Signals** (optional): `Message.Signal` names, comma-separated, to load only some signals.
 
-It saves a `.trz` file to **Documents/Photon Traces** and returns its path. Open the file in Zelos: **Open trace** on Home, or **DATA SOURCES → Add trace → File** in the right sidebar (`Ctrl+J`). Signals appear as `photon/<Message>.<Signal>`.
+By default it uploads the session to **Zelos Cloud** as a trace **tagged `Photon`**, opens it in Zelos, and returns the share link. Anyone in the lhrs org can open that link, and Zelos AI can analyze the trace. Signals appear as `photon/<Message>.<Signal>`.
 
-> Why a file? Zelos keeps live data for only about 8 hours, so loading weeks-old car data straight into the live view would vanish within a minute. Destination **Live workspace (recent data only)** works only for data from the last 7.5 hours, like today's drive.
+- **Load the same thing again** (same session, resolution, window and signals) and this laptop reopens the trace it already uploaded instead of making a duplicate. Tick **Upload again** to force a fresh trace.
+- **Trace name / Extra tags** (optional): rename the trace, or add existing org tags next to `Photon`.
+- Zelos can't search the Cloud for existing traces, so a teammate loading the same session gets their own copy. Before loading, check console2 → Traces (filter by the `Photon` tag) for an existing one.
 
-### 3. Share a session
-Run **Upload Session**. It uses the same choices, plus an optional **Trace name** and **Extra tags**. It uploads to Zelos Cloud **always tagged `Photon`**, opens the trace in Zelos, and returns the share link. Anyone in the lhrs org can open it, and Zelos AI can analyze it.
+**Other destinations** (the **Destination** field):
+- **Trace file**: saves a private `.trz` to **Documents/Photon Traces**. Open it with **Open trace** on Home, or **DATA SOURCES → Add trace → File** in the right sidebar (`Ctrl+J`).
+- **Live workspace (recent data only)**: streams into the live view, but only for data from the last 7.5 hours (Zelos drops older live data within a minute).
 
-### 4. Long jobs
-Load and Upload answer within 4 minutes. Anything longer keeps running in the background. Run **Job Status** to see progress and the final result, or **Cancel Job** to stop.
+### 3. Long jobs
+Load Session answers within 4 minutes. Anything longer keeps running in the background. Run **Job Status** to see progress and the final result, or **Cancel Job** to stop.
 
 ## Troubleshooting
 
 | Problem | Fix |
 |---|---|
 | Actions fail with *"Photon password is not set"* or *"refused the password"* | Re-enter the password under EXTENSIONS → Photon → gear, then **Save & Restart** |
-| Upload fails with *"no 'Photon' tag"* | An lhrs org owner must create the `Photon` tag once in console2.zeloscloud.io → Tags |
+| Load fails with *"no 'Photon' tag"* | An lhrs org owner must create the `Photon` tag once in console2.zeloscloud.io → Tags |
+| Load fails with a sign-in or storage error | Sign in to the lhrs org in Zelos. If the org's Cloud storage is full, ask an owner, or use Destination **Trace file** |
+| A reused trace was deleted from the Cloud | Load again with **Upload again** ticked |
 | *"roughly N GB of Photon data"* | Pick a coarser resolution or a shorter window, or tick **Allow large transfers** |
 | No EXTENSIONS or ACTIONS section | You're viewing a trace. Switch to the live workspace connected to `localhost` |
 | A signal stops early at `1 s` / `100 ms` | Photon's rollup data can end before its raw data. Load that window at `raw` |
