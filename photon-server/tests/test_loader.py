@@ -65,7 +65,7 @@ def test_pump_chunks_and_logs_everything():
     declare(src, schema)
     p = Progress()
     totals = pump(client, S, Window(1000, 1000 + 120_001), 1, None, src, allowed_fields(schema), p)
-    assert totals == {"rows": 3600, "events": 2400, "dropped": 0}
+    assert totals == {"rows": 3600, "events": 2400, "dropped": 0, "array_frames": 0, "split_records": 0}
     assert len(src.records) == 2400 and src.flushes == 1
     assert p.snapshot()["chunks"] == "1/1"
 

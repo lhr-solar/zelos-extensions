@@ -231,3 +231,10 @@ def test_short_form_has_only_the_everyday_fields_in_order():
 def test_short_load_goes_to_cloud_and_opens(fake_cloud):
     out = actions.load_session("20261017-012401-00 | label", resolution="100 ms", start_offset_min=1, duration_min=2)
     assert out["destination"] == "zelos cloud" and out["opened_in_app"] and fake_cloud["uploads"][0]["level"] == 1
+
+
+def test_older_trace_formats_are_not_reused(fake_cloud, monkeypatch):
+    first = actions.load_session("20261017-012401-00 | label")
+    monkeypatch.setattr(actions, "TRACE_FORMAT", actions.TRACE_FORMAT + 1)
+    second = actions.load_session("20261017-012401-00 | label")
+    assert not second["reused"] and second["trace_id"] != first["trace_id"]

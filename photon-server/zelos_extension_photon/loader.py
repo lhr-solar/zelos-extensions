@@ -29,6 +29,7 @@ from typing import Any, Protocol
 import zelos_sdk
 from zelos_sdk import DataType, TraceEventFieldMetadata
 
+from .arrays import ARRAY_MESSAGES, ArrayRouter, pair_frames
 from .photon import CatalogSession, PhotonClient, Row
 from .sessions import DISCOVERY_LEVEL, Window, chunks
 
@@ -41,6 +42,10 @@ LOG_BATCH = 5000
 Schema = dict[str, dict[str, str]]  # message -> {signal: unit}
 
 CAN_MESSAGE_EVENT_TYPE = "zelos.can.message.v1"
+
+# Bump when what goes into a trace changes, so the per-laptop upload record stops reusing older traces.
+# 2: array messages read raw and split per slot; frames sharing a timestamp no longer dropped.
+TRACE_FORMAT = 2
 
 
 @dataclass(frozen=True)
@@ -150,10 +155,15 @@ def group_rows(rows: Iterable[Row], allowed: dict[str, set[str]] | None = None, 
 
     `allowed` (event -> declared fields) drops anything a declared schema can't hold.
     Returns (records, rows_seen, rows_dropped).
+
+    Raw data often has several frames of one message at the same timestamp (Photon stamps every frame
+    in a CANP batch with the batch time). Every signal of a message lists those frames in the same
+    order, so the k-th row of each signal at a given timestamp belongs to the k-th frame.
     """
     naming = naming or Naming("photon")
-    events: dict[tuple[str, int], dict[str, float]] = {}
+    events: dict[tuple[str, int, int], dict[str, float]] = {}
     names: dict[tuple[str, str], tuple[str, str]] = {}
+    occurrence: dict[tuple[str, str, int], int] = {}
     seen = dropped = 0
     for r in rows:
         seen += 1
@@ -165,33 +175,93 @@ def group_rows(rows: Iterable[Row], allowed: dict[str, set[str]] | None = None, 
         if allowed is not None and fld not in allowed.get(ev, ()):
             dropped += 1
             continue
-        events.setdefault((ev, r.t_ms), {})[fld] = r.value
-    recs = [(t * 1_000_000, ev, f) for (ev, t), f in events.items()]
-    recs.sort(key=lambda x: x[0])
+        k = occurrence.get((r.message, r.signal, r.t_ms), 0)
+        occurrence[(r.message, r.signal, r.t_ms)] = k + 1
+        events.setdefault((ev, r.t_ms, k), {})[fld] = r.value
+    recs = [(t * 1_000_000, ev, f) for (ev, t, _k), f in sorted(events.items(), key=lambda kv: (kv[0][1], kv[0][2]))]
     return recs, seen, dropped
+
+
+RAW_ARRAY_CHUNK_MS = 5 * 60_000  # raw array messages are fetched in 5-minute pieces
 
 
 def pump(client: PhotonClient, s: CatalogSession, window: Window, level: int, signals: list[str] | None,
          source: Source, allowed: dict[str, set[str]], progress: Progress,
-         naming: Naming | None = None) -> dict[str, int]:
-    """Fetch `window` chunk by chunk and log it into `source`."""
+         naming: Naming | None = None, router: ArrayRouter | None = None,
+         derived_sources: dict[str, Source] | None = None) -> dict[str, int]:
+    """Fetch `window` chunk by chunk and log it into `source`.
+
+    Array messages (see `arrays.py`) never come from Photon's averaged levels: at raw they are taken
+    from the main stream, otherwise fetched raw separately, thinned per slot and, with a router that
+    derives, split into per-channel/per-tap sources in `derived_sources`.
+    """
+    naming = naming or Naming("photon")
+    derived_sources = derived_sources or {}
     parts = chunks(window, level)
     progress.update(chunks_total=len(parts), chunks_done=0)
-    totals = {"rows": 0, "events": 0, "dropped": 0}
+    totals = {"rows": 0, "events": 0, "dropped": 0, "array_frames": 0, "split_records": 0}
     for i, part in enumerate(parts):
         progress.check()
         progress.update(phase=f"loading {i + 1}/{len(parts)}")
-        recs, seen, dropped = group_rows(client.stream_rows(s.id, part.from_ms, part.to_ms, level, signals),
+        diverted: list[Row] = []
+
+        def main_rows(rows: Iterable[Row], sink: list[Row] = diverted) -> Iterable[Row]:
+            for r in rows:
+                if r.message in ARRAY_MESSAGES:
+                    if level == 0:
+                        sink.append(r)
+                    continue  # never use an averaged array row
+                yield r
+
+        recs, seen, dropped = group_rows(main_rows(client.stream_rows(s.id, part.from_ms, part.to_ms, level, signals)),
                                          allowed, naming)
+        derived: dict[str, list] = {}
+        if router is not None and router.present:
+            if level == 0:
+                frames = pair_frames(diverted, router.present)
+                seen += len(diverted)
+            else:
+                frames = []
+                wanted = [f"{m}.{sig}" for m in sorted(router.present) for sig in router.signals.get(m, [])]
+                t = part.from_ms
+                while t < part.to_ms:
+                    progress.check()
+                    sub = list(client.stream_rows(s.id, t, min(part.to_ms, t + RAW_ARRAY_CHUNK_MS), 0, wanted))
+                    seen += len(sub)
+                    frames.extend(pair_frames(sub, router.present))
+                    t += RAW_ARRAY_CHUNK_MS
+            array_out, derived = router.route(frames)
+            for msg, values, t_ms in array_out:
+                ev = naming.event(msg)
+                fields = {sanitize(k, "field"): v for k, v in values.items()}
+                fields = {k: v for k, v in fields.items() if k in allowed.get(ev, ())}
+                if fields:
+                    recs.append((t_ms * 1_000_000, ev, fields))
+            recs.sort(key=lambda x: x[0])
+            totals["array_frames"] += len(array_out)
         for j in range(0, len(recs), LOG_BATCH):
             progress.check()
             source.log_many(recs[j:j + LOG_BATCH])
         source.flush()
+        for src_name, drecs in derived.items():
+            target = derived_sources.get(src_name)
+            if target is None:
+                continue
+            for j in range(0, len(drecs), LOG_BATCH):
+                target.log_many(drecs[j:j + LOG_BATCH])
+            target.flush()
+            totals["split_records"] += len(drecs)
         totals["rows"] += seen
         totals["events"] += len(recs)
         totals["dropped"] += dropped
         progress.update(chunks_done=i + 1, rows=totals["rows"], events=totals["events"])
     return totals
+
+
+def make_router(schema: Schema, level: int, derive: bool) -> ArrayRouter:
+    router = ArrayRouter(present=set(schema), level=level, derive=derive)
+    router.signals = {m: sorted(schema[m]) for m in router.present}
+    return router
 
 
 def allowed_fields(schema: Schema, naming: Naming | None = None) -> dict[str, set[str]]:
@@ -236,7 +306,10 @@ class LiveLoader:
             entry = (source, declared, allowed_fields(schema))
             self._sources[name] = entry
         source, _declared, allowed = entry
-        totals = pump(client, s, window, level, signals, source, allowed, progress)
+        # The live PDU/battery notebooks own the split sources in the live workspace, so only thin here.
+        schema_like = {m: sorted(set(allowed.get(m, ()))) for m in ARRAY_MESSAGES if m in allowed}
+        router = make_router(schema_like, level, derive=False)
+        totals = pump(client, s, window, level, signals, source, allowed, progress, router=router)
         return {"source": name, **totals}
 
 
@@ -263,7 +336,16 @@ def write_trace(client: PhotonClient, s: CatalogSession, window: Window, level: 
         with zelos_sdk.TraceWriter(str(path), namespace=ns):
             source = zelos_sdk.TraceSource(naming.source, namespace=ns)
             declare(source, schema, naming=naming)
-            return pump(client, s, window, level, signals, source, allowed_fields(schema, naming), progress, naming)
+            router = make_router(schema, level, derive=True)
+            derived: dict[str, Source] = {}
+            for src_name, events in router.derived_sources().items():
+                src = zelos_sdk.TraceSource(src_name, namespace=ns)
+                for ev, fields in events.items():
+                    src.add_event(ev, fields)
+                derived[src_name] = src
+            totals = pump(client, s, window, level, signals, source, allowed_fields(schema, naming), progress,
+                          naming, router=router, derived_sources=derived)
+            return {**totals, "split_sources": sorted(derived)}
     except BaseException:
         with contextlib.suppress(OSError):
             path.unlink()  # never leave a half-written trace that looks complete

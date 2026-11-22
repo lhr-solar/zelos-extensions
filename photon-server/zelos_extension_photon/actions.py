@@ -23,6 +23,7 @@ from zelos_sdk.actions import ActionsRegistry, action
 
 from .loader import (
     PHOTON_TAG,
+    TRACE_FORMAT,
     Cancelled,
     LiveLoader,
     Naming,
@@ -298,7 +299,7 @@ def _load(session: str, resolution: str | None = None, start_offset_min: float |
     org = STATE.config.get("organization") or None
 
     if dest == DEST_CLOUD:
-        key = upload_key(s.id, level, window.from_ms, window.to_ms, sig, org, STATE.naming.label)
+        key = upload_key(s.id, level, window.from_ms, window.to_ms, sig, org, _record_naming())
         prior = None if new_upload else STATE.uploads.get(key)
         if prior and prior.get("trace_id"):
             opened = bool(open_in_app) and _open(prior.get("organization") or org, prior)
@@ -325,13 +326,18 @@ def _load(session: str, resolution: str | None = None, start_offset_min: float |
         entry = {"url": res.get("url"), "trace_id": res.get("trace_id"), "name": res.get("name"),
                  "tags": res.get("tags"), "organization": org or _org_from_url(res.get("url"))}
         if entry["trace_id"]:
-            STATE.uploads.put(upload_key(s.id, level, window.from_ms, window.to_ms, sig, org, STATE.naming.label),
+            STATE.uploads.put(upload_key(s.id, level, window.from_ms, window.to_ms, sig, org, _record_naming()),
                               entry)
         opened = bool(open_in_app) and _open(entry["organization"], entry)
         return {**common, "destination": "zelos cloud", "reused": False, "opened_in_app": opened,
                 "seconds": round(time.monotonic() - t0, 1), **res}
 
     return STATE.run_job("load", s.id, job)
+
+
+def _record_naming() -> str:
+    """Upload-record key part: signal naming plus trace format, so older-format traces aren't reused."""
+    return f"{STATE.naming.label}#f{TRACE_FORMAT}"
 
 
 def _open(org: str | None, entry: dict[str, Any]) -> bool:
