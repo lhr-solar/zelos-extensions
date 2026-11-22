@@ -153,7 +153,7 @@ def test_upload_trace_is_written_in_its_own_namespace(monkeypatch, tmp_path):
 
     monkeypatch.setattr(loader.zelos_sdk, "TraceSource", spy)
     _upload(FakeAgent(), [], tmp_path)
-    assert seen["name"] == "photon" and seen["ns"] is not None
+    assert seen["name"] == "CAN" and seen["ns"] is not None
 
 
 def test_write_trace_produces_a_trace_file(tmp_path):
@@ -177,3 +177,28 @@ def test_write_trace_removes_partial_file_on_cancel(tmp_path):
     with pytest.raises(Cancelled):
         write_trace(client, S, Window(1000, 121_001), 1, None, path, p)
     assert not path.exists()
+
+
+def test_can_naming_matches_the_can_extension():
+    from zelos_extension_photon.loader import CAN_MESSAGE_EVENT_TYPE, can_naming
+
+    src = FakeSource()
+    naming = can_naming()
+    declare(src, {"Pedal_Status": {"AccelPedal_Main_Pos": "%"}}, naming=naming)
+    # High Noon binds {source: CAN, message: CarCAN/Pedal_Status, signal: AccelPedal_Main_Pos,
+    #                  eventType: zelos.can.message.v1}
+    assert src.events == {"CarCAN/Pedal_Status": [("AccelPedal_Main_Pos", "%")]}
+    assert src.event_types == {"CarCAN/Pedal_Status": CAN_MESSAGE_EVENT_TYPE}
+    recs, _, _ = group_rows([Row(5, "Pedal_Status", "AccelPedal_Main_Pos", "%", 12.5)], naming=naming)
+    assert recs == [(5_000_000, "CarCAN/Pedal_Status", {"AccelPedal_Main_Pos": 12.5})]
+    assert naming.label == "CAN/CarCAN"
+
+
+def test_live_loads_keep_their_own_source():
+    client = FakeClient({5: rows_for(1000, 3, 30_000), 2: rows_for(1000, 10, 1000)})
+    made: dict[str, FakeSource] = {}
+    LiveLoader(lambda: client, lambda name: made.setdefault(name, FakeSource())).load(
+        S, Window(1000, 121_001), 2, None, Progress())
+    (name, src), = made.items()
+    assert name == "photon-20260723-164704-00"
+    assert "BPS_Status" in src.events and all(t is None for t in src.event_types.values())

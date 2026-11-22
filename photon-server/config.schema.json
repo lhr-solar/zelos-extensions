@@ -30,6 +30,18 @@
       "enum": ["1 s", "100 ms", "raw", "10 s"],
       "default": "1 s"
     },
+    "can_source": {
+      "type": "string",
+      "title": "CAN source name",
+      "description": "Trace source for Photon signals. Match the CAN extension's prefix (default CAN) so CAN layouts work on Photon traces.",
+      "default": "CAN"
+    },
+    "can_bus": {
+      "type": "string",
+      "title": "CAN bus name",
+      "description": "Bus segment in event names (CAN/<bus>/<Message>). Match the CAN extension's Channel Display Name.",
+      "default": "CarCAN"
+    },
     "traces_dir": {
       "type": "string",
       "title": "Trace folder",

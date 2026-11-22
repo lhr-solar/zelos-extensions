@@ -19,9 +19,11 @@ logger = logging.getLogger(__name__)
 
 
 def upload_key(session_id: str, level: int, from_ms: int, to_ms: int, signals: list[str] | None,
-               organization: str | None) -> str:
+               organization: str | None, naming: str = "") -> str:
+    """Identifies one upload. `naming` (e.g. 'CAN/CarCAN') keeps traces written with older signal names
+    from being reused once the naming changes."""
     sig = ",".join(sorted(signals)) if signals else "all"
-    return f"{organization or '-'}|{session_id}|L{level}|{from_ms}-{to_ms}|{sig}"
+    return f"{organization or '-'}|{naming or 'photon'}|{session_id}|L{level}|{from_ms}-{to_ms}|{sig}"
 
 
 class UploadRecord:

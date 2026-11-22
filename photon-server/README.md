@@ -12,7 +12,7 @@ It only reads Photon, through the same endpoints photon.html uses. It never chan
 | Action | What it does | Zelos AI |
 |---|---|---|
 | **List Sessions** | Lists Photon's stored sessions, grouped by local day (newest first), with start time, length, samples and whether video exists | Runs without asking (read-only) |
-| **Load Session** | Pick a day and a session, plus optional resolution, start offset, duration and signals. By default it builds the trace, seals it as TRZ2, uploads it to Zelos Cloud **tagged `Photon`** (plus any extra tags), opens it in the app and returns the share link. Loading the same thing again on this laptop reuses that trace. *Destination* can be *Trace file* (a local `.trz` in *Documents/Photon Traces*) or *Live workspace* (recent data only). Signals appear as `photon/<Message>.<Signal>` | Asks first |
+| **Load Session** | Pick a day and a session, plus optional resolution, start offset, duration and signals. By default it builds the trace, seals it as TRZ2, uploads it to Zelos Cloud **tagged `Photon`** (plus any extra tags), opens it in the app and returns the share link. Loading the same thing again on this laptop reuses that trace. *Destination* can be *Trace file* (a local `.trz` in *Documents/Photon Traces*) or *Live workspace* (recent data only). Signals use the CAN extension's names (`CAN` / `CarCAN/<Message>` / `<Signal>`, event type `zelos.can.message.v1`), so CAN layouts such as High Noon work on Photon traces | Asks first |
 | **Job Status** | Progress and the result of the running or last load/upload | Read-only |
 | **Cancel Job** | Stops the running load or upload after its current chunk | Asks first |
 
@@ -30,9 +30,13 @@ The Zelos app keeps live data in memory and **prunes samples older than about 8 
 
 *Destination → Live workspace (recent data only)* exists for data from the last 7.5 hours, such as today's drive. The action refuses older windows.
 
+### Same names as the CAN extension
+
+Zelos layouts bind each signal by `source`, `message` (event), `signal` (field) and `eventType`. The CAN extension writes source `CAN`, events `<bus>/<Message>` and event type `zelos.can.message.v1`, so Photon traces are written the same way. Photon and the HighNoon DBCs use the same message and signal names (checked for the Pedals tab), so one layout serves live PCAN data and Photon traces. Live-workspace loads use their own `photon-<session id>` source so they can't collide with a running CAN extension.
+
 ### Reusing uploads
 
-Zelos has no API to list or search Cloud traces, so the extension can't tell whether a teammate already uploaded a session. Instead each laptop keeps a record in `~/.photon-zelos/uploads.json`, keyed by org, session, resolution, window and signal list. A repeat load reopens the recorded trace, and *Upload again* bypasses the record. Trace names follow one pattern, `<local date time> <session id> (<resolution>)[ from HH:MM N min]`, so duplicates are easy to spot in the console.
+Zelos has no API to list or search Cloud traces, so the extension can't tell whether a teammate already uploaded a session. Instead each laptop keeps a record in `~/.photon-zelos/uploads.json`, keyed by org, signal naming, session, resolution, window and signal list. A repeat load reopens the recorded trace, and *Upload again* bypasses the record. Trace names follow one pattern, `<local date time> <session id> (<resolution>)[ from HH:MM N min]`, so duplicates are easy to spot in the console.
 
 ### The Photon tag
 
@@ -46,6 +50,8 @@ Zelos never creates tags on upload. If a Cloud load fails with *"Zelos Cloud has
 | Photon password | — | The shared Photon web password (user `photon`). It lives only in this extension's settings, never in the repo |
 | Time zone | `America/Chicago` | For day grouping and labels. Data stays UTC |
 | Default resolution | `1 s` | |
+| CAN source name | `CAN` | Trace source for Photon signals. Match the CAN extension's prefix |
+| CAN bus name | `CarCAN` | Bus segment of event names. Match the CAN extension's *Channel Display Name* |
 | Trace folder | *Documents/Photon Traces* | Where Load Session writes `.trz` files |
 | Zelos organization | `lhrs` | For uploads. Empty means your active org |
 

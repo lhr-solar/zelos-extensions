@@ -1,6 +1,10 @@
 """Move Photon rows into Zelos: into the live workspace, or into a sealed trace uploaded to Cloud.
 
-Mapping: one Zelos event per CAN message, one Float64 field per signal, with the DBC unit. Within a
+Mapping: one Zelos event per CAN message, one Float64 field per signal, with the DBC unit. Traces use
+the CAN extension's naming (source ``CAN``, event ``CarCAN/<Message>``, event type
+``zelos.can.message.v1``), so one layout such as High Noon works on live PCAN data and on Photon
+traces. Live-workspace loads keep their own ``photon-<session>`` source so they never mix with a
+running CAN extension. Within a
 message every signal shares the frame timestamp (checked across all messages in the Phase 0 spike),
 so rows group cleanly by (message, t_ms). A Zelos event schema cannot grow after it is declared, so
 each job first discovers the session's full message/signal set from the coarsest TSDB level.
@@ -36,13 +40,37 @@ LOG_BATCH = 5000
 
 Schema = dict[str, dict[str, str]]  # message -> {signal: unit}
 
+CAN_MESSAGE_EVENT_TYPE = "zelos.can.message.v1"
+
+
+@dataclass(frozen=True)
+class Naming:
+    """Where Photon messages land in a trace: source, optional event prefix (the CAN bus), event type."""
+
+    source: str
+    bus: str | None = None
+    event_type: str | None = None
+
+    def event(self, message: str) -> str:
+        ev = zelos_sdk.sanitize_name(message, kind="event")
+        return f"{self.bus}/{ev}" if self.bus else ev
+
+    @property
+    def label(self) -> str:
+        return f"{self.source}/{self.bus}" if self.bus else self.source
+
+
+def can_naming(source: str = "CAN", bus: str = "CarCAN") -> Naming:
+    """The CAN extension's layout: source `CAN`, events `<bus>/<Message>`, tagged as CAN messages."""
+    return Naming(source or "CAN", bus or None, CAN_MESSAGE_EVENT_TYPE)
+
 
 class Cancelled(Exception):
     pass
 
 
 class Source(Protocol):
-    def add_event(self, name: str, schema: list[TraceEventFieldMetadata]) -> Any: ...
+    def add_event(self, name: str, schema: list[TraceEventFieldMetadata], event_type: str | None = None) -> Any: ...
     def log_many(self, records: list[tuple[int, str, dict[str, float]]]) -> Any: ...
     def flush(self) -> Any: ...
 
@@ -95,29 +123,35 @@ def discover_schema(client: PhotonClient, s: CatalogSession, signals: list[str] 
     return schema
 
 
-def declare(source: Source, schema: Schema, declared: set[str] | None = None) -> set[str]:
+def declare(source: Source, schema: Schema, declared: set[str] | None = None,
+            naming: Naming | None = None) -> set[str]:
     """Declare one event per message. Returns the event names declared now."""
+    naming = naming or Naming("photon")
     declared = declared if declared is not None else set()
     new = set()
     for msg in sorted(schema):
-        ev = sanitize(msg, "event")
+        ev = naming.event(msg)
         if ev in declared:
             continue
         fields = [TraceEventFieldMetadata(sanitize(sig, "field"), DataType.Float64, unit or None)
                   for sig, unit in sorted(schema[msg].items())]
-        source.add_event(ev, fields)
+        if naming.event_type:
+            source.add_event(ev, fields, event_type=naming.event_type)
+        else:
+            source.add_event(ev, fields)
         declared.add(ev)
         new.add(ev)
     return new
 
 
-def group_rows(rows: Iterable[Row], allowed: dict[str, set[str]] | None = None
+def group_rows(rows: Iterable[Row], allowed: dict[str, set[str]] | None = None, naming: Naming | None = None
                ) -> tuple[list[tuple[int, str, dict[str, float]]], int, int]:
     """Group long-format rows into (time_ns, event, {field: value}) records, sorted by time.
 
     `allowed` (event -> declared fields) drops anything a declared schema can't hold.
     Returns (records, rows_seen, rows_dropped).
     """
+    naming = naming or Naming("photon")
     events: dict[tuple[str, int], dict[str, float]] = {}
     names: dict[tuple[str, str], tuple[str, str]] = {}
     seen = dropped = 0
@@ -126,7 +160,7 @@ def group_rows(rows: Iterable[Row], allowed: dict[str, set[str]] | None = None
         key = (r.message, r.signal)
         ev_field = names.get(key)
         if ev_field is None:
-            ev_field = names[key] = (sanitize(r.message, "event"), sanitize(r.signal, "field"))
+            ev_field = names[key] = (naming.event(r.message), sanitize(r.signal, "field"))
         ev, fld = ev_field
         if allowed is not None and fld not in allowed.get(ev, ()):
             dropped += 1
@@ -138,7 +172,8 @@ def group_rows(rows: Iterable[Row], allowed: dict[str, set[str]] | None = None
 
 
 def pump(client: PhotonClient, s: CatalogSession, window: Window, level: int, signals: list[str] | None,
-         source: Source, allowed: dict[str, set[str]], progress: Progress) -> dict[str, int]:
+         source: Source, allowed: dict[str, set[str]], progress: Progress,
+         naming: Naming | None = None) -> dict[str, int]:
     """Fetch `window` chunk by chunk and log it into `source`."""
     parts = chunks(window, level)
     progress.update(chunks_total=len(parts), chunks_done=0)
@@ -147,7 +182,7 @@ def pump(client: PhotonClient, s: CatalogSession, window: Window, level: int, si
         progress.check()
         progress.update(phase=f"loading {i + 1}/{len(parts)}")
         recs, seen, dropped = group_rows(client.stream_rows(s.id, part.from_ms, part.to_ms, level, signals),
-                                         allowed)
+                                         allowed, naming)
         for j in range(0, len(recs), LOG_BATCH):
             progress.check()
             source.log_many(recs[j:j + LOG_BATCH])
@@ -159,8 +194,9 @@ def pump(client: PhotonClient, s: CatalogSession, window: Window, level: int, si
     return totals
 
 
-def allowed_fields(schema: Schema) -> dict[str, set[str]]:
-    return {sanitize(m, "event"): {sanitize(s, "field") for s in sigs} for m, sigs in schema.items()}
+def allowed_fields(schema: Schema, naming: Naming | None = None) -> dict[str, set[str]]:
+    naming = naming or Naming("photon")
+    return {naming.event(m): {sanitize(s, "field") for s in sigs} for m, sigs in schema.items()}
 
 
 # ── live workspace ─────────────────────────────────────────────────────────
@@ -211,9 +247,10 @@ class LiveLoader:
 
 
 def write_trace(client: PhotonClient, s: CatalogSession, window: Window, level: int, signals: list[str] | None,
-                path: Path, progress: Progress) -> dict[str, int]:
-    """Write `window` of `s` to a .trz file (one source, ``photon``). Nothing reaches the live workspace:
-    the source lives in its own namespace, which only the TraceWriter records."""
+                path: Path, progress: Progress, naming: Naming | None = None) -> dict[str, int]:
+    """Write `window` of `s` to a .trz file, named like the CAN extension by default. Nothing reaches the
+    live workspace: the source lives in its own namespace, which only the TraceWriter records."""
+    naming = naming or can_naming()
     progress.update(phase="discovering signals")
     schema = discover_schema(client, s, signals, progress)
     if not schema:
@@ -224,9 +261,9 @@ def write_trace(client: PhotonClient, s: CatalogSession, window: Window, level: 
     ns = zelos_sdk.TraceNamespace(f"photon_{int(time.time() * 1000)}")
     try:
         with zelos_sdk.TraceWriter(str(path), namespace=ns):
-            source = zelos_sdk.TraceSource("photon", namespace=ns)
-            declare(source, schema)
-            return pump(client, s, window, level, signals, source, allowed_fields(schema), progress)
+            source = zelos_sdk.TraceSource(naming.source, namespace=ns)
+            declare(source, schema, naming=naming)
+            return pump(client, s, window, level, signals, source, allowed_fields(schema, naming), progress, naming)
     except BaseException:
         with contextlib.suppress(OSError):
             path.unlink()  # never leave a half-written trace that looks complete
@@ -254,7 +291,7 @@ def open_cloud_trace(organization: str, trace_id: str) -> bool:
 
 def build_and_upload(client: PhotonClient, agent: Any, s: CatalogSession, window: Window, level: int,
                      signals: list[str] | None, name: str, extra_tags: list[str], organization: str | None,
-                     progress: Progress, workdir: Path | None = None) -> dict[str, Any]:
+                     progress: Progress, workdir: Path | None = None, naming: Naming | None = None) -> dict[str, Any]:
     """Photon CSV -> TraceWriter (.trz) -> agent export to sealed TRZ2 -> agent.upload, tagged Photon.
 
     The app's agent keeps live data in memory, which cannot seal TRZ2, so the trace is written to
@@ -264,7 +301,7 @@ def build_and_upload(client: PhotonClient, agent: Any, s: CatalogSession, window
     tmp = Path(tempfile.mkdtemp(prefix="photon-upload-", dir=workdir))
     legacy, sealed = tmp / f"{s.id}.trz", tmp / f"{s.id}.trz2.trz"
     try:
-        totals = write_trace(client, s, window, level, signals, legacy, progress)
+        totals = write_trace(client, s, window, level, signals, legacy, progress, naming)
         progress.check()
         progress.update(phase="sealing TRZ2")
         trace = agent.trace(str(legacy))

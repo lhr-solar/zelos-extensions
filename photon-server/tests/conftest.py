@@ -37,13 +37,15 @@ class FakeClient:
 class FakeSource:
     def __init__(self):
         self.events: dict[str, list] = {}
+        self.event_types: dict[str, str | None] = {}
         self.records: list = []
         self.flushes = 0
 
-    def add_event(self, name, schema):
+    def add_event(self, name, schema, event_type=None):
         if name in self.events:
             raise ValueError(f"Event={name} already exists")
         self.events[name] = [(f.name, f.unit) if hasattr(f, "unit") else f for f in schema]
+        self.event_types[name] = event_type
 
     def log_many(self, records):
         self.records.extend(records)

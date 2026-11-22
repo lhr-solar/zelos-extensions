@@ -21,7 +21,17 @@ from zoneinfo import ZoneInfo
 import zelos_sdk
 from zelos_sdk.actions import ActionsRegistry, action
 
-from .loader import PHOTON_TAG, Cancelled, LiveLoader, Progress, build_and_upload, open_cloud_trace, write_trace
+from .loader import (
+    PHOTON_TAG,
+    Cancelled,
+    LiveLoader,
+    Naming,
+    Progress,
+    build_and_upload,
+    can_naming,
+    open_cloud_trace,
+    write_trace,
+)
 from .photon import CatalogSession, PhotonClient, PhotonError
 from .sessions import (
     RESOLUTION_CHOICES,
@@ -87,6 +97,12 @@ class State:
     @property
     def tz(self) -> ZoneInfo:
         return ZoneInfo(self.config.get("timezone") or "America/Chicago")
+
+    @property
+    def naming(self) -> Naming:
+        """Trace naming that matches the CAN extension's (configurable if the CAN bus is named differently)."""
+        return can_naming((self.config.get("can_source") or "CAN").strip(),
+                          (self.config.get("can_bus") or "CarCAN").strip())
 
     @property
     def default_resolution(self) -> str:
@@ -242,7 +258,8 @@ def list_sessions(day: str | None = None, limit_days: int = 10, refresh: bool = 
         f"tagged '{PHOTON_TAG}' and opens it in the app; loading the same thing again on this laptop reuses that "
         "trace. 'Trace file' saves a local .trz instead. 'Live workspace' streams into the live view, but Zelos "
         f"keeps live data for only about 8 hours, so that works only for data under {LIVE_MAX_AGE_H:g} h old. "
-        "Signals appear as photon/<Message>.<Signal>.",
+        "Signals use the CAN extension's names (CAN/CarCAN/<Message>.<Signal>), so CAN layouts such as "
+        "High Noon work on them.",
         timeout=1800, submit_text="Load")
 @action.boolean("new_upload", title="Upload again", required=False, default=False,
                 description="Zelos Cloud only: upload a fresh trace even if this laptop already uploaded this one.")
@@ -278,7 +295,7 @@ def load_session(session: str, day: str | None = None, resolution: str | None = 
     org = STATE.config.get("organization") or None
 
     if dest == DEST_CLOUD:
-        key = upload_key(s.id, level, window.from_ms, window.to_ms, sig, org)
+        key = upload_key(s.id, level, window.from_ms, window.to_ms, sig, org, STATE.naming.label)
         prior = None if new_upload else STATE.uploads.get(key)
         if prior and prior.get("trace_id"):
             opened = bool(open_in_app) and _open(prior.get("organization") or org, prior)
@@ -292,7 +309,7 @@ def load_session(session: str, day: str | None = None, resolution: str | None = 
             return {**common, "destination": "live workspace", "seconds": round(time.monotonic() - t0, 1), **res}
         if dest == DEST_FILE:
             path = STATE.trace_path(s, res_name, whole=whole, window=window)
-            res = write_trace(STATE.client(), s, window, level, sig, path, STATE.progress)
+            res = write_trace(STATE.client(), s, window, level, sig, path, STATE.progress, STATE.naming)
             return {**common, "destination": "trace file", "path": str(path),
                     "size_mb": round(path.stat().st_size / 1e6, 1), "seconds": round(time.monotonic() - t0, 1),
                     "next": "Open this .trz in Zelos: Open trace on Home, or Data Sources -> Add trace -> File.",
@@ -301,11 +318,12 @@ def load_session(session: str, day: str | None = None, resolution: str | None = 
                          + ("" if whole else f" from {dt.datetime.fromtimestamp(window.from_ms / 1000, STATE.tz):%H:%M}"
                                              f" {window.duration_s / 60:.0f} min"))
         res = build_and_upload(STATE.client(), STATE.agent_factory(), s, window, level, sig, label,
-                               _parse_list(extra_tags), org, STATE.progress, STATE.workdir)
+                               _parse_list(extra_tags), org, STATE.progress, STATE.workdir, STATE.naming)
         entry = {"url": res.get("url"), "trace_id": res.get("trace_id"), "name": res.get("name"),
                  "tags": res.get("tags"), "organization": org or _org_from_url(res.get("url"))}
         if entry["trace_id"]:
-            STATE.uploads.put(upload_key(s.id, level, window.from_ms, window.to_ms, sig, org), entry)
+            STATE.uploads.put(upload_key(s.id, level, window.from_ms, window.to_ms, sig, org, STATE.naming.label),
+                              entry)
         opened = bool(open_in_app) and _open(entry["organization"], entry)
         return {**common, "destination": "zelos cloud", "reused": False, "opened_in_app": opened,
                 "seconds": round(time.monotonic() - t0, 1), **res}

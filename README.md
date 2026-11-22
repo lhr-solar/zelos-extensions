@@ -37,7 +37,9 @@ Run **Load Session**:
 - **Start offset / Duration** (minutes, optional): load just part of a run.
 - **Signals** (optional): `Message.Signal` names, comma-separated, to load only some signals.
 
-By default it uploads the session to **Zelos Cloud** as a trace **tagged `Photon`**, opens it in Zelos, and returns the share link. Anyone in the lhrs org can open that link, and Zelos AI can analyze the trace. Signals appear as `photon/<Message>.<Signal>`.
+By default it uploads the session to **Zelos Cloud** as a trace **tagged `Photon`**, opens it in Zelos, and returns the share link. Anyone in the lhrs org can open that link, and Zelos AI can analyze the trace.
+
+**Signals use the same names as the CAN extension** (`CAN` → `CarCAN/<Message>` → `<Signal>`), so the shared **High Noon** layout and any other layout built on live PCAN data work on Photon traces unchanged. Live-workspace loads are the exception: they appear under `photon-<session id>` so they never mix with a running CAN extension.
 
 - **Load the same thing again** (same session, resolution, window and signals) and this laptop reopens the trace it already uploaded instead of making a duplicate. Tick **Upload again** to force a fresh trace.
 - **Trace name / Extra tags** (optional): rename the trace, or add existing org tags next to `Photon`.
@@ -58,6 +60,7 @@ Load Session answers within 4 minutes. Anything longer keeps running in the back
 | Load fails with *"no 'Photon' tag"* | An lhrs org owner must create the `Photon` tag once in console2.zeloscloud.io → Tags |
 | Load fails with a sign-in or storage error | Sign in to the lhrs org in Zelos. If the org's Cloud storage is full, ask an owner, or use Destination **Trace file** |
 | A reused trace was deleted from the Cloud | Load again with **Upload again** ticked |
+| High Noon panels are empty on a Photon trace | Check that the extension's **CAN source name** / **CAN bus name** settings match your CAN extension (defaults `CAN` / `CarCAN`). Traces uploaded before this naming (signals under `photon/`) need **Upload again** |
 | *"roughly N GB of Photon data"* | Pick a coarser resolution or a shorter window, or tick **Allow large transfers** |
 | No EXTENSIONS or ACTIONS section | You're viewing a trace. Switch to the live workspace connected to `localhost` |
 | A signal stops early at `1 s` / `100 ms` | Photon's rollup data can end before its raw data. Load that window at `raw` |

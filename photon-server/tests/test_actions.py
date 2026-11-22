@@ -137,7 +137,7 @@ def test_load_to_a_trace_file(monkeypatch, tmp_path):
     STATE.configure({"timezone": "America/Chicago", "traces_dir": str(tmp_path)})
     written = {}
 
-    def fake_write(client, s, window, level, sig, path, progress):
+    def fake_write(client, s, window, level, sig, path, progress, naming=None):
         path.write_bytes(b"trz")
         written.update(level=level, path=path)
         return {"rows": 1, "events": 1, "dropped": 0}
@@ -157,7 +157,8 @@ def fake_cloud(monkeypatch):
     monkeypatch.setattr(STATE, "client", lambda: None)
     monkeypatch.setattr(STATE, "agent_factory", lambda: None)
 
-    def fake_upload(client, agent, s, window, level, sig, name, extra_tags, org, progress, workdir):
+    def fake_upload(client, agent, s, window, level, sig, name, extra_tags, org, progress, workdir, naming=None):
+        calls.setdefault("naming", []).append(naming)
         n = len(calls["uploads"]) + 1
         calls["uploads"].append({"name": name, "tags": ["Photon", *extra_tags], "org": org, "level": level})
         return {"url": f"https://console2.zeloscloud.io/lhrs/traces/t{n}", "trace_id": f"t{n}", "name": name,
@@ -199,3 +200,13 @@ def test_cloud_load_without_opening_and_with_extra_tags(fake_cloud):
 def test_unknown_destination_is_refused(fake_cloud):
     with pytest.raises(ValueError, match="Unknown destination"):
         actions.load_session("20261017-012401-00 | label", destination="Somewhere")
+
+
+def test_loads_use_the_can_extensions_names(fake_cloud):
+    actions.load_session("20261017-012401-00 | label")
+    n = fake_cloud["naming"][0]
+    assert (n.source, n.bus, n.event_type) == ("CAN", "CarCAN", "zelos.can.message.v1")
+    STATE.configure({"timezone": "America/Chicago", "organization": "lhrs", "can_bus": "Car CAN 2"})
+    actions.load_session("20261017-012401-00 | label")
+    assert fake_cloud["naming"][1].bus == "Car CAN 2"
+    assert len(fake_cloud["uploads"]) == 2  # a different naming is a different trace
