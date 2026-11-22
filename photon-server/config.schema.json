@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Photon",
+  "description": "Connects Zelos to the Photon telemetry server. Load stored car sessions into the app, or upload them to Zelos Cloud (always tagged Photon).",
+  "properties": {
+    "photon_url": {
+      "type": "string",
+      "title": "Photon URL",
+      "description": "Base URL of the Photon web UI. The extension uses its /ws catalog and /export.csv endpoints.",
+      "default": "https://photon-dev.lhrsolar.org",
+      "pattern": "^https?://"
+    },
+    "password": {
+      "type": "string",
+      "title": "Photon password",
+      "description": "The shared Photon web password (user 'photon'). Stored only in this extension's settings.",
+      "ui:widget": "password"
+    },
+    "timezone": {
+      "type": "string",
+      "title": "Time zone for session labels",
+      "description": "IANA zone used to group sessions into days and label start times. Data timestamps are always UTC.",
+      "default": "America/Chicago"
+    },
+    "default_resolution": {
+      "type": "string",
+      "title": "Default resolution",
+      "description": "Resolution used when a load or upload doesn't pick one.",
+      "enum": ["1 s", "100 ms", "raw", "10 s"],
+      "default": "1 s"
+    },
+    "traces_dir": {
+      "type": "string",
+      "title": "Trace folder",
+      "description": "Where Load Session saves .trz files. Empty uses Documents/Photon Traces.",
+      "ui:widget": "folder-picker"
+    },
+    "organization": {
+      "type": "string",
+      "title": "Zelos organization",
+      "description": "Org slug for Cloud uploads. Leave empty for your active organization.",
+      "default": "lhrs"
+    }
+  },
+  "required": ["photon_url"]
+}

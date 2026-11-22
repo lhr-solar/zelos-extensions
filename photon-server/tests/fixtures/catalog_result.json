@@ -1,0 +1,2649 @@
+{
+ "protocol_version": 1,
+ "sessions": [
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260712-215252-00",
+   "max_ms": 1783893414986,
+   "min_ms": 1783893172655,
+   "path": "F:\\lhr\\data\\tsdb\\20260712-215252-00",
+   "sample_count": 312571
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260712-220451-00",
+   "max_ms": 1783894281593,
+   "min_ms": 1783893891494,
+   "path": "F:\\lhr\\data\\tsdb\\20260712-220451-00",
+   "sample_count": 1235527
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260712-224328-00",
+   "max_ms": 1783897103642,
+   "min_ms": 1783896208599,
+   "path": "F:\\lhr\\data\\tsdb\\20260712-224328-00",
+   "sample_count": 901642
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260712-230359-00",
+   "max_ms": 1783897524176,
+   "min_ms": 1783897439250,
+   "path": "F:\\lhr\\data\\tsdb\\20260712-230359-00",
+   "sample_count": 258804
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260714-050500-00",
+   "max_ms": 1784006750233,
+   "min_ms": 1784005500327,
+   "path": "F:\\lhr\\data\\tsdb\\20260714-050500-00",
+   "sample_count": 2640
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260714-053538-00",
+   "max_ms": 1784012337592,
+   "min_ms": 1784007338863,
+   "path": "F:\\lhr\\data\\tsdb\\20260714-053538-00",
+   "sample_count": 11020
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260714-070457-00",
+   "max_ms": 1784013125338,
+   "min_ms": 1784012697159,
+   "path": "F:\\lhr\\data\\tsdb\\20260714-070457-00",
+   "sample_count": 848
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260714-071748-00",
+   "max_ms": 1784014762385,
+   "min_ms": 1784013468527,
+   "path": "F:\\lhr\\data\\tsdb\\20260714-071748-00",
+   "sample_count": 5208
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260717-053101-00",
+   "max_ms": 1784266583309,
+   "min_ms": 1784266261883,
+   "path": "F:\\lhr\\data\\tsdb\\20260717-053101-00",
+   "sample_count": 246124
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260717-054728-00",
+   "max_ms": 1784267563421,
+   "min_ms": 1784267248607,
+   "path": "F:\\lhr\\data\\tsdb\\20260717-054728-00",
+   "sample_count": 82964
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260717-192024-00",
+   "max_ms": 1784316567480,
+   "min_ms": 1784316024572,
+   "path": "F:\\lhr\\data\\tsdb\\20260717-192024-00",
+   "sample_count": 27877
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260717-204921-00",
+   "max_ms": 1784321377460,
+   "min_ms": 1784321361491,
+   "path": "F:\\lhr\\data\\tsdb\\20260717-204921-00",
+   "sample_count": 924
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260717-210154-00",
+   "max_ms": 1784322131350,
+   "min_ms": 1784322114833,
+   "path": "F:\\lhr\\data\\tsdb\\20260717-210154-00",
+   "sample_count": 14517
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260717-211224-00",
+   "max_ms": 1784322772577,
+   "min_ms": 1784322744080,
+   "path": "F:\\lhr\\data\\tsdb\\20260717-211224-00",
+   "sample_count": 23778
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-005838-00",
+   "max_ms": 1784336498718,
+   "min_ms": 1784336318236,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-005838-00",
+   "sample_count": 213522
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-012410-00",
+   "max_ms": 1784338324062,
+   "min_ms": 1784337850326,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-012410-00",
+   "sample_count": 587114
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-024040-00",
+   "max_ms": 1784342618658,
+   "min_ms": 1784342440178,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-024040-00",
+   "sample_count": 748
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-030847-00",
+   "max_ms": 1784344524810,
+   "min_ms": 1784344127070,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-030847-00",
+   "sample_count": 301900
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-032415-00",
+   "max_ms": 1784345933471,
+   "min_ms": 1784345055344,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-032415-00",
+   "sample_count": 1690261
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-034413-00",
+   "max_ms": 1784346557815,
+   "min_ms": 1784346253554,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-034413-00",
+   "sample_count": 1380936
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-042230-00",
+   "max_ms": 1784349026075,
+   "min_ms": 1784348550159,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-042230-00",
+   "sample_count": 408216
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-043743-00",
+   "max_ms": 1784349788493,
+   "min_ms": 1784349463190,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-043743-00",
+   "sample_count": 1357566
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-202804-00",
+   "max_ms": 1784406850105,
+   "min_ms": 1784406484401,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-202804-00",
+   "sample_count": 315113
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-220025-00",
+   "max_ms": 1784412048591,
+   "min_ms": 1784412025043,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-220025-00",
+   "sample_count": 38270
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260718-222707-00",
+   "max_ms": 1784413627894,
+   "min_ms": 1784413627893,
+   "path": "F:\\lhr\\data\\tsdb\\20260718-222707-00",
+   "sample_count": 918
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-001802-00",
+   "max_ms": 1784421491021,
+   "min_ms": 1784420282510,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-001802-00",
+   "sample_count": 1627292
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-004456-00",
+   "max_ms": 1784422329851,
+   "min_ms": 1784421896889,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-004456-00",
+   "sample_count": 2776631
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-010528-00",
+   "max_ms": 1784424248476,
+   "min_ms": 1784423128467,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-010528-00",
+   "sample_count": 5434608
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-014906-00",
+   "max_ms": 1784425750266,
+   "min_ms": 1784425746672,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-014906-00",
+   "sample_count": 69709
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-025240-00",
+   "max_ms": 1784431534366,
+   "min_ms": 1784429560850,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-025240-00",
+   "sample_count": 13127467
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-033314-00",
+   "max_ms": 1784433421351,
+   "min_ms": 1784431994564,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-033314-00",
+   "sample_count": 11773478
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-040629-00",
+   "max_ms": 1784435218688,
+   "min_ms": 1784433989912,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-040629-00",
+   "sample_count": 10051574
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-043224-00",
+   "max_ms": 1784439390223,
+   "min_ms": 1784435544341,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-043224-00",
+   "sample_count": 26887321
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-141231-00",
+   "max_ms": 1784474559974,
+   "min_ms": 1784473465194,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-141231-00",
+   "sample_count": 3130712
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-152853-00",
+   "max_ms": 1784477523385,
+   "min_ms": 1784474933705,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-152853-00",
+   "sample_count": 5142170
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-165213-00",
+   "max_ms": 1784481049287,
+   "min_ms": 1784479933214,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-165213-00",
+   "sample_count": 3301496
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-172105-00",
+   "max_ms": 1784481865235,
+   "min_ms": 1784481671809,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-172105-00",
+   "sample_count": 1595899
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-182809-00",
+   "max_ms": 1784486163517,
+   "min_ms": 1784485689543,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-182809-00",
+   "sample_count": 3821628
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-185050-00",
+   "max_ms": 1784487450360,
+   "min_ms": 1784487050276,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-185050-00",
+   "sample_count": 4291289
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-191036-00",
+   "max_ms": 1784488520468,
+   "min_ms": 1784488236324,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-191036-00",
+   "sample_count": 1504553
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-193103-00",
+   "max_ms": 1784489492004,
+   "min_ms": 1784489463887,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-193103-00",
+   "sample_count": 269522
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-194039-00",
+   "max_ms": 1784490404280,
+   "min_ms": 1784490039466,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-194039-00",
+   "sample_count": 1505142
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-195322-00",
+   "max_ms": 1784490844339,
+   "min_ms": 1784490802639,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-195322-00",
+   "sample_count": 380429
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-202354-00",
+   "max_ms": 1784496266185,
+   "min_ms": 1784492634957,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-202354-00",
+   "sample_count": 18886312
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260719-223421-00",
+   "max_ms": 1784502633315,
+   "min_ms": 1784500461499,
+   "path": "F:\\lhr\\data\\tsdb\\20260719-223421-00",
+   "sample_count": 11089064
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-023519-00",
+   "max_ms": 1784516955672,
+   "min_ms": 1784514919918,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-023519-00",
+   "sample_count": 16169380
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-031756-00",
+   "max_ms": 1784517513001,
+   "min_ms": 1784517476283,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-031756-00",
+   "sample_count": 338838
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-034437-00",
+   "max_ms": 1784521164726,
+   "min_ms": 1784519077417,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-034437-00",
+   "sample_count": 11233582
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-092742-00",
+   "max_ms": 1784539834651,
+   "min_ms": 1784539662464,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-092742-00",
+   "sample_count": 928166
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-093616-00",
+   "max_ms": 1784540375100,
+   "min_ms": 1784540176249,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-093616-00",
+   "sample_count": 127807
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-133054-00",
+   "max_ms": 1784554275603,
+   "min_ms": 1784554254977,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-133054-00",
+   "sample_count": 23573
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-144551-00",
+   "max_ms": 1784558954293,
+   "min_ms": 1784558751376,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-144551-00",
+   "sample_count": 1614982
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-174109-00",
+   "max_ms": 1784569348614,
+   "min_ms": 1784569269528,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-174109-00",
+   "sample_count": 128136
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-185211-00",
+   "max_ms": 1784573850315,
+   "min_ms": 1784573531153,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-185211-00",
+   "sample_count": 1504602
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260720-210047-00",
+   "max_ms": 1784582607978,
+   "min_ms": 1784581247671,
+   "path": "F:\\lhr\\data\\tsdb\\20260720-210047-00",
+   "sample_count": 5728379
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-064915-00",
+   "max_ms": 1784617437138,
+   "min_ms": 1784616555454,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-064915-00",
+   "sample_count": 6977940
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-072126-00",
+   "max_ms": 1784619436876,
+   "min_ms": 1784618486953,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-072126-00",
+   "sample_count": 3598796
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-074514-00",
+   "max_ms": 1784619918252,
+   "min_ms": 1784619914711,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-074514-00",
+   "sample_count": 70885
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-082214-00",
+   "max_ms": 1784622283200,
+   "min_ms": 1784622134409,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-082214-00",
+   "sample_count": 449568
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-083629-00",
+   "max_ms": 1784623317234,
+   "min_ms": 1784622989469,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-083629-00",
+   "sample_count": 2305803
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-085148-00",
+   "max_ms": 1784624198143,
+   "min_ms": 1784623908783,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-085148-00",
+   "sample_count": 2535725
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-090212-00",
+   "max_ms": 1784624551227,
+   "min_ms": 1784624532384,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-090212-00",
+   "sample_count": 199038
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-091212-00",
+   "max_ms": 1784625682712,
+   "min_ms": 1784625132487,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-091212-00",
+   "sample_count": 4554520
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-092944-00",
+   "max_ms": 1784628718717,
+   "min_ms": 1784626184669,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-092944-00",
+   "sample_count": 13568644
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-103655-00",
+   "max_ms": 1784632816247,
+   "min_ms": 1784630215514,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-103655-00",
+   "sample_count": 15444407
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260721-112657-00",
+   "max_ms": 1784635635502,
+   "min_ms": 1784633217277,
+   "path": "F:\\lhr\\data\\tsdb\\20260721-112657-00",
+   "sample_count": 16017341
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260722-223110-00",
+   "max_ms": 1784767992357,
+   "min_ms": 1784759470165,
+   "path": "F:\\lhr\\data\\tsdb\\20260722-223110-00",
+   "sample_count": 79292289
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-052513-00",
+   "max_ms": 1784784514733,
+   "min_ms": 1784784313462,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-052513-00",
+   "sample_count": 769356
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-055247-00",
+   "max_ms": 1784786938324,
+   "min_ms": 1784785967275,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-055247-00",
+   "sample_count": 6658119
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-065301-00",
+   "max_ms": 1784789585771,
+   "min_ms": 1784789581910,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-065301-00",
+   "sample_count": 75811
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-072701-00",
+   "max_ms": 1784791646392,
+   "min_ms": 1784791621014,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-072701-00",
+   "sample_count": 265619
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-080202-00",
+   "max_ms": 1784793769725,
+   "min_ms": 1784793722682,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-080202-00",
+   "sample_count": 433482
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-080901-00",
+   "max_ms": 1784794175162,
+   "min_ms": 1784794141159,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-080901-00",
+   "sample_count": 337627
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-082130-00",
+   "max_ms": 1784795275063,
+   "min_ms": 1784794890802,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-082130-00",
+   "sample_count": 1679126
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-083542-00",
+   "max_ms": 1784795795179,
+   "min_ms": 1784795742174,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-083542-00",
+   "sample_count": 507677
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-085846-00",
+   "max_ms": 1784797177552,
+   "min_ms": 1784797126386,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-085846-00",
+   "sample_count": 488441
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-090948-00",
+   "max_ms": 1784797844711,
+   "min_ms": 1784797788145,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-090948-00",
+   "sample_count": 541378
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-121313-00",
+   "max_ms": 1784818757944,
+   "min_ms": 1784808793243,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-121313-00",
+   "sample_count": 91799276
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-150652-00",
+   "max_ms": 1784819248921,
+   "min_ms": 1784819212634,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-150652-00",
+   "sample_count": 298963
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-153025-00",
+   "max_ms": 1784824922948,
+   "min_ms": 1784820625064,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-153025-00",
+   "sample_count": 36874980
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-164704-00",
+   "max_ms": 1784838019750,
+   "min_ms": 1784825224217,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-164704-00",
+   "sample_count": 120004345
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-205754-00",
+   "max_ms": 1784840373220,
+   "min_ms": 1784840274627,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-205754-00",
+   "sample_count": 1005282
+  },
+  {
+   "dbc_hash": "5847632a1d8b322d52304440d664760f1ab103aa",
+   "has_video": false,
+   "id": "20260723-212137-00",
+   "max_ms": 1784845222041,
+   "min_ms": 1784841697020,
+   "path": "F:\\lhr\\data\\tsdb\\20260723-212137-00",
+   "sample_count": 27956761
+  },
+  {
+   "has_video": true,
+   "id": "20260905-031401-00",
+   "max_ms": 1788579850022,
+   "min_ms": 1788578041128,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-031401-00",
+   "sample_count": 6954983
+  },
+  {
+   "has_video": true,
+   "id": "20260905-031401-01",
+   "max_ms": 1788579850022,
+   "min_ms": 1788578041128,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-031401-01",
+   "sample_count": 6954983
+  },
+  {
+   "has_video": true,
+   "id": "20260905-035242-00",
+   "max_ms": 1788602625602,
+   "min_ms": 1788580362306,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-035242-00",
+   "sample_count": 51299837
+  },
+  {
+   "has_video": true,
+   "id": "20260905-144251-00",
+   "max_ms": 1788620224973,
+   "min_ms": 1788619371200,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-144251-00",
+   "sample_count": 1925018
+  },
+  {
+   "has_video": false,
+   "id": "20260905-145829-00",
+   "max_ms": 1788624478838,
+   "min_ms": 1788620309721,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-145829-00",
+   "sample_count": 9231785
+  },
+  {
+   "has_video": true,
+   "id": "20260905-153531-00",
+   "max_ms": 1788624482005,
+   "min_ms": 1788622531123,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-153531-00",
+   "sample_count": 4415714
+  },
+  {
+   "has_video": true,
+   "id": "20260905-160940-00",
+   "max_ms": 1788626882598,
+   "min_ms": 1788624580760,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-160940-00",
+   "sample_count": 7445880
+  },
+  {
+   "has_video": true,
+   "id": "20260905-164719-00",
+   "max_ms": 1788626882687,
+   "min_ms": 1788626839907,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-164719-00",
+   "sample_count": 1168
+  },
+  {
+   "has_video": true,
+   "id": "20260905-164719-01",
+   "max_ms": 1788626882754,
+   "min_ms": 1788626839939,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-164719-01",
+   "sample_count": 1638
+  },
+  {
+   "has_video": true,
+   "id": "20260905-164720-00",
+   "max_ms": 1788626882821,
+   "min_ms": 1788626840028,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-164720-00",
+   "sample_count": 1617
+  },
+  {
+   "has_video": true,
+   "id": "20260905-164720-01",
+   "max_ms": 1788626882865,
+   "min_ms": 1788626840129,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-164720-01",
+   "sample_count": 1637
+  },
+  {
+   "has_video": true,
+   "id": "20260905-164720-02",
+   "max_ms": 1788626882942,
+   "min_ms": 1788626840249,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-164720-02",
+   "sample_count": 2396
+  },
+  {
+   "has_video": true,
+   "id": "20260905-164720-03",
+   "max_ms": 1788626883010,
+   "min_ms": 1788626840414,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-164720-03",
+   "sample_count": 2539
+  },
+  {
+   "has_video": true,
+   "id": "20260905-164720-04",
+   "max_ms": 1788626883078,
+   "min_ms": 1788626840601,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-164720-04",
+   "sample_count": 2864
+  },
+  {
+   "has_video": true,
+   "id": "20260905-164720-05",
+   "max_ms": 1788626883145,
+   "min_ms": 1788626840815,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-164720-05",
+   "sample_count": 3158
+  },
+  {
+   "has_video": true,
+   "id": "20260905-164721-00",
+   "max_ms": 1788631307880,
+   "min_ms": 1788626841056,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-164721-00",
+   "sample_count": 45105604
+  },
+  {
+   "has_video": false,
+   "id": "20260905-192000-00",
+   "max_ms": 1788636039953,
+   "min_ms": 1788636000077,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-192000-00",
+   "sample_count": 427050
+  },
+  {
+   "has_video": false,
+   "id": "20260905-192036-00",
+   "max_ms": 1788637850095,
+   "min_ms": 1788636036511,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-192036-00",
+   "sample_count": 19285110
+  },
+  {
+   "has_video": false,
+   "id": "20260905-203312-00",
+   "max_ms": 1788641059495,
+   "min_ms": 1788640392862,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-203312-00",
+   "sample_count": 915495
+  },
+  {
+   "has_video": false,
+   "id": "20260905-204616-00",
+   "max_ms": 1788641857350,
+   "min_ms": 1788641176687,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-204616-00",
+   "sample_count": 4805322
+  },
+  {
+   "has_video": false,
+   "id": "20260905-210807-00",
+   "max_ms": 1788643342063,
+   "min_ms": 1788642487949,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-210807-00",
+   "sample_count": 6238495
+  },
+  {
+   "has_video": true,
+   "id": "20260905-213010-00",
+   "max_ms": 1788643928242,
+   "min_ms": 1788643810801,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-213010-00",
+   "sample_count": 926632
+  },
+  {
+   "has_video": true,
+   "id": "20260905-213843-00",
+   "max_ms": 1788644918285,
+   "min_ms": 1788644323901,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-213843-00",
+   "sample_count": 4389416
+  },
+  {
+   "has_video": true,
+   "id": "20260905-220058-00",
+   "max_ms": 1788645934976,
+   "min_ms": 1788645658552,
+   "path": "F:\\lhr\\data\\tsdb\\20260905-220058-00",
+   "sample_count": 2086018
+  },
+  {
+   "has_video": true,
+   "id": "20260907-013533-00",
+   "max_ms": 1788746015152,
+   "min_ms": 1788744933004,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-013533-00",
+   "sample_count": 8732338
+  },
+  {
+   "has_video": true,
+   "id": "20260907-021613-00",
+   "max_ms": 1788747892547,
+   "min_ms": 1788747373251,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-021613-00",
+   "sample_count": 5078931
+  },
+  {
+   "has_video": true,
+   "id": "20260907-035016-00",
+   "max_ms": 1788753023816,
+   "min_ms": 1788753016649,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-035016-00",
+   "sample_count": 144323
+  },
+  {
+   "has_video": false,
+   "id": "20260907-042257-00",
+   "max_ms": 1788755024370,
+   "min_ms": 1788754977806,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-042257-00",
+   "sample_count": 40469
+  },
+  {
+   "has_video": false,
+   "id": "20260907-152923-00",
+   "max_ms": 1788795379028,
+   "min_ms": 1788794963642,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-152923-00",
+   "sample_count": 3314754
+  },
+  {
+   "has_video": false,
+   "id": "20260907-160219-00",
+   "max_ms": 1788797462768,
+   "min_ms": 1788796939915,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-160219-00",
+   "sample_count": 3718702
+  },
+  {
+   "has_video": false,
+   "id": "20260907-161654-00",
+   "max_ms": 1788797928378,
+   "min_ms": 1788797814486,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-161654-00",
+   "sample_count": 1309685
+  },
+  {
+   "has_video": true,
+   "id": "20260907-181139-00",
+   "max_ms": 1788804748839,
+   "min_ms": 1788804699416,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-181139-00",
+   "sample_count": 593068
+  },
+  {
+   "has_video": true,
+   "id": "20260907-181903-00",
+   "max_ms": 1788806439995,
+   "min_ms": 1788805143191,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-181903-00",
+   "sample_count": 10205964
+  },
+  {
+   "has_video": true,
+   "id": "20260907-185128-00",
+   "max_ms": 1788807244792,
+   "min_ms": 1788807088625,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-185128-00",
+   "sample_count": 1708110
+  },
+  {
+   "has_video": false,
+   "id": "20260907-190932-00",
+   "max_ms": 1788809601347,
+   "min_ms": 1788808172603,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-190932-00",
+   "sample_count": 10515373
+  },
+  {
+   "has_video": true,
+   "id": "20260907-193830-00",
+   "max_ms": 1788810208943,
+   "min_ms": 1788809910400,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-193830-00",
+   "sample_count": 3245085
+  },
+  {
+   "has_video": true,
+   "id": "20260907-195550-00",
+   "max_ms": 1788813135448,
+   "min_ms": 1788810950839,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-195550-00",
+   "sample_count": 20084371
+  },
+  {
+   "has_video": true,
+   "id": "20260907-205709-00",
+   "max_ms": 1788816362825,
+   "min_ms": 1788814629352,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-205709-00",
+   "sample_count": 17920426
+  },
+  {
+   "has_video": true,
+   "id": "20260907-221043-00",
+   "max_ms": 1788819746879,
+   "min_ms": 1788819043125,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-221043-00",
+   "sample_count": 7628556
+  },
+  {
+   "has_video": true,
+   "id": "20260907-225804-00",
+   "max_ms": 1788822063887,
+   "min_ms": 1788821884409,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-225804-00",
+   "sample_count": 2015316
+  },
+  {
+   "has_video": true,
+   "id": "20260907-230636-00",
+   "max_ms": 1788823978049,
+   "min_ms": 1788822396222,
+   "path": "F:\\lhr\\data\\tsdb\\20260907-230636-00",
+   "sample_count": 8856580
+  },
+  {
+   "has_video": true,
+   "id": "20260912-005417-00",
+   "max_ms": 1789174476633,
+   "min_ms": 1789174457865,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-005417-00",
+   "sample_count": 225998
+  },
+  {
+   "has_video": false,
+   "id": "20260912-011325-00",
+   "max_ms": 1789175619999,
+   "min_ms": 1789175605583,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-011325-00",
+   "sample_count": 192955
+  },
+  {
+   "has_video": true,
+   "id": "20260912-020816-00",
+   "max_ms": 1789180151647,
+   "min_ms": 1789178896626,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-020816-00",
+   "sample_count": 10553930
+  },
+  {
+   "has_video": true,
+   "id": "20260912-034506-00",
+   "max_ms": 1789184761868,
+   "min_ms": 1789184706581,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-034506-00",
+   "sample_count": 543419
+  },
+  {
+   "has_video": false,
+   "id": "20260912-171205-00",
+   "max_ms": 1789233126043,
+   "min_ms": 1789233125555,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171205-00",
+   "sample_count": 17507
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171206-00",
+   "max_ms": 1789233129713,
+   "min_ms": 1789233126043,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171206-00",
+   "sample_count": 73106
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171209-00",
+   "max_ms": 1789233131283,
+   "min_ms": 1789233129754,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171209-00",
+   "sample_count": 11250
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171211-00",
+   "max_ms": 1789233137715,
+   "min_ms": 1789233131324,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171211-00",
+   "sample_count": 46548
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171217-00",
+   "max_ms": 1789233142077,
+   "min_ms": 1789233137756,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171217-00",
+   "sample_count": 34766
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171222-00",
+   "max_ms": 1789233144468,
+   "min_ms": 1789233142117,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171222-00",
+   "sample_count": 16809
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171224-00",
+   "max_ms": 1789233150557,
+   "min_ms": 1789233144508,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171224-00",
+   "sample_count": 24607
+  },
+  {
+   "has_video": false,
+   "id": "20260912-171230-00",
+   "max_ms": 1789233152386,
+   "min_ms": 1789233150557,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171230-00",
+   "sample_count": 28147
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171232-00",
+   "max_ms": 1789233166033,
+   "min_ms": 1789233152426,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171232-00",
+   "sample_count": 84821
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171246-00",
+   "max_ms": 1789233169127,
+   "min_ms": 1789233166033,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171246-00",
+   "sample_count": 39972
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171249-00",
+   "max_ms": 1789233187189,
+   "min_ms": 1789233169167,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171249-00",
+   "sample_count": 120870
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171307-00",
+   "max_ms": 1789233220514,
+   "min_ms": 1789233187229,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171307-00",
+   "sample_count": 260890
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171340-00",
+   "max_ms": 1789233238045,
+   "min_ms": 1789233220554,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171340-00",
+   "sample_count": 124585
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171358-00",
+   "max_ms": 1789233509964,
+   "min_ms": 1789233238085,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171358-00",
+   "sample_count": 2334839
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171830-00",
+   "max_ms": 1789233573491,
+   "min_ms": 1789233510005,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171830-00",
+   "sample_count": 537736
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171906-00",
+   "max_ms": 1789233575400,
+   "min_ms": 1789233573531,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171906-00",
+   "sample_count": 13259
+  },
+  {
+   "has_video": false,
+   "id": "20260912-171935-01",
+   "max_ms": 1789233578764,
+   "min_ms": 1789233575480,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171935-01",
+   "sample_count": 21939
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171938-00",
+   "max_ms": 1789233594447,
+   "min_ms": 1789233578804,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171938-00",
+   "sample_count": 126969
+  },
+  {
+   "has_video": false,
+   "id": "20260912-171954-00",
+   "max_ms": 1789233595734,
+   "min_ms": 1789233594487,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171954-00",
+   "sample_count": 9236
+  },
+  {
+   "has_video": true,
+   "id": "20260912-171955-00",
+   "max_ms": 1789233604941,
+   "min_ms": 1789233595774,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-171955-00",
+   "sample_count": 65527
+  },
+  {
+   "has_video": false,
+   "id": "20260912-172004-00",
+   "max_ms": 1789233605121,
+   "min_ms": 1789233604981,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172004-00",
+   "sample_count": 1248
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172005-00",
+   "max_ms": 1789233730331,
+   "min_ms": 1789233605162,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172005-00",
+   "sample_count": 1056607
+  },
+  {
+   "has_video": false,
+   "id": "20260912-172210-00",
+   "max_ms": 1789233806374,
+   "min_ms": 1789233730371,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172210-00",
+   "sample_count": 627976
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172326-00",
+   "max_ms": 1789233859709,
+   "min_ms": 1789233806414,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172326-00",
+   "sample_count": 386232
+  },
+  {
+   "has_video": false,
+   "id": "20260912-172419-00",
+   "max_ms": 1789233893788,
+   "min_ms": 1789233859709,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172419-00",
+   "sample_count": 209799
+  },
+  {
+   "has_video": false,
+   "id": "20260912-172453-00",
+   "max_ms": 1789233900600,
+   "min_ms": 1789233893788,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172453-00",
+   "sample_count": 55862
+  },
+  {
+   "has_video": false,
+   "id": "20260912-172500-00",
+   "max_ms": 1789233900601,
+   "min_ms": 1789233900600,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172500-00",
+   "sample_count": 6188
+  },
+  {
+   "has_video": false,
+   "id": "20260912-172500-01",
+   "max_ms": 1789233903121,
+   "min_ms": 1789233900601,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172500-01",
+   "sample_count": 5983
+  },
+  {
+   "has_video": false,
+   "id": "20260912-172503-00",
+   "max_ms": 1789233905573,
+   "min_ms": 1789233903121,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172503-00",
+   "sample_count": 41380
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172505-00",
+   "max_ms": 1789233920320,
+   "min_ms": 1789233905613,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172505-00",
+   "sample_count": 107674
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172520-00",
+   "max_ms": 1789233922371,
+   "min_ms": 1789233920360,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172520-00",
+   "sample_count": 14131
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172522-00",
+   "max_ms": 1789233940061,
+   "min_ms": 1789233922411,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172522-00",
+   "sample_count": 128114
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172540-00",
+   "max_ms": 1789233946977,
+   "min_ms": 1789233940101,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172540-00",
+   "sample_count": 32269
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172539-00",
+   "max_ms": 1789233948407,
+   "min_ms": 1789233946977,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172539-00",
+   "sample_count": 24794
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172548-00",
+   "max_ms": 1789233949232,
+   "min_ms": 1789233948447,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172548-00",
+   "sample_count": 5741
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172549-00",
+   "max_ms": 1789233959106,
+   "min_ms": 1789233949272,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172549-00",
+   "sample_count": 68452
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172559-00",
+   "max_ms": 1789233959207,
+   "min_ms": 1789233959146,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172559-00",
+   "sample_count": 529
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172539-01",
+   "max_ms": 1789233981020,
+   "min_ms": 1789233959247,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172539-01",
+   "sample_count": 151163
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172621-00",
+   "max_ms": 1789233994083,
+   "min_ms": 1789233981100,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172621-00",
+   "sample_count": 67834
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172634-00",
+   "max_ms": 1789233999594,
+   "min_ms": 1789233994083,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172634-00",
+   "sample_count": 61821
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172639-00",
+   "max_ms": 1789234002551,
+   "min_ms": 1789233999634,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172639-00",
+   "sample_count": 2179
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172642-00",
+   "max_ms": 1789234023317,
+   "min_ms": 1789234002551,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172642-00",
+   "sample_count": 169240
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172703-00",
+   "max_ms": 1789234027359,
+   "min_ms": 1789234023357,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172703-00",
+   "sample_count": 32444
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172707-00",
+   "max_ms": 1789234027820,
+   "min_ms": 1789234027399,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172707-00",
+   "sample_count": 3249
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172707-01",
+   "max_ms": 1789234039212,
+   "min_ms": 1789234027861,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172707-01",
+   "sample_count": 80514
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172719-00",
+   "max_ms": 1789234103841,
+   "min_ms": 1789234039252,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172719-00",
+   "sample_count": 534475
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172823-00",
+   "max_ms": 1789234115923,
+   "min_ms": 1789234103882,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172823-00",
+   "sample_count": 83303
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172835-00",
+   "max_ms": 1789234116747,
+   "min_ms": 1789234115963,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172835-00",
+   "sample_count": 5880
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172836-00",
+   "max_ms": 1789234131681,
+   "min_ms": 1789234116787,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172836-00",
+   "sample_count": 105719
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172851-00",
+   "max_ms": 1789234166504,
+   "min_ms": 1789234131722,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172851-00",
+   "sample_count": 228340
+  },
+  {
+   "has_video": false,
+   "id": "20260912-172926-00",
+   "max_ms": 1789234166505,
+   "min_ms": 1789234166504,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172926-00",
+   "sample_count": 6769
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172926-01",
+   "max_ms": 1789234171881,
+   "min_ms": 1789234166505,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172926-01",
+   "sample_count": 51578
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172931-00",
+   "max_ms": 1789234176992,
+   "min_ms": 1789234171921,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172931-00",
+   "sample_count": 11510
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172936-00",
+   "max_ms": 1789234186207,
+   "min_ms": 1789234176992,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172936-00",
+   "sample_count": 91816
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172946-00",
+   "max_ms": 1789234189503,
+   "min_ms": 1789234186247,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172946-00",
+   "sample_count": 23104
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172949-00",
+   "max_ms": 1789234196581,
+   "min_ms": 1789234189543,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172949-00",
+   "sample_count": 55009
+  },
+  {
+   "has_video": true,
+   "id": "20260912-172956-00",
+   "max_ms": 1789234204702,
+   "min_ms": 1789234196621,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-172956-00",
+   "sample_count": 60826
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173001-00",
+   "max_ms": 1789234221669,
+   "min_ms": 1789234204742,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173001-00",
+   "sample_count": 134011
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173021-00",
+   "max_ms": 1789234240488,
+   "min_ms": 1789234221709,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173021-00",
+   "sample_count": 147098
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173040-00",
+   "max_ms": 1789234248313,
+   "min_ms": 1789234240529,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173040-00",
+   "sample_count": 58908
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173001-01",
+   "max_ms": 1789234268907,
+   "min_ms": 1789234248353,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173001-01",
+   "sample_count": 153923
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173108-00",
+   "max_ms": 1789234269772,
+   "min_ms": 1789234268947,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173108-00",
+   "sample_count": 5790
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173109-00",
+   "max_ms": 1789234283523,
+   "min_ms": 1789234269812,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173109-00",
+   "sample_count": 70890
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173123-00",
+   "max_ms": 1789234290806,
+   "min_ms": 1789234283523,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173123-00",
+   "sample_count": 37617
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173130-00",
+   "max_ms": 1789234295237,
+   "min_ms": 1789234290806,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173130-00",
+   "sample_count": 58497
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173135-00",
+   "max_ms": 1789234308097,
+   "min_ms": 1789234295277,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173135-00",
+   "sample_count": 71125
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173148-00",
+   "max_ms": 1789234319501,
+   "min_ms": 1789234308098,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173148-00",
+   "sample_count": 105007
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173159-00",
+   "max_ms": 1789234320687,
+   "min_ms": 1789234319541,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173159-00",
+   "sample_count": 7767
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173200-00",
+   "max_ms": 1789234326407,
+   "min_ms": 1789234320728,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173200-00",
+   "sample_count": 36348
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173206-00",
+   "max_ms": 1789234331748,
+   "min_ms": 1789234326407,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173206-00",
+   "sample_count": 42101
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173211-00",
+   "max_ms": 1789234346495,
+   "min_ms": 1789234331788,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173211-00",
+   "sample_count": 81501
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173226-00",
+   "max_ms": 1789234347799,
+   "min_ms": 1789234346495,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173226-00",
+   "sample_count": 24409
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173227-00",
+   "max_ms": 1789234362216,
+   "min_ms": 1789234347839,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173227-00",
+   "sample_count": 91445
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173242-00",
+   "max_ms": 1789234369719,
+   "min_ms": 1789234362216,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173242-00",
+   "sample_count": 42321
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173249-00",
+   "max_ms": 1789234387009,
+   "min_ms": 1789234369719,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173249-00",
+   "sample_count": 137405
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173307-00",
+   "max_ms": 1789234409739,
+   "min_ms": 1789234387049,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173307-00",
+   "sample_count": 150344
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173329-00",
+   "max_ms": 1789234428446,
+   "min_ms": 1789234409739,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173329-00",
+   "sample_count": 137423
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173348-00",
+   "max_ms": 1789234434993,
+   "min_ms": 1789234428446,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173348-00",
+   "sample_count": 50342
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173355-00",
+   "max_ms": 1789234458304,
+   "min_ms": 1789234435033,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173355-00",
+   "sample_count": 154966
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173418-00",
+   "max_ms": 1789234467256,
+   "min_ms": 1789234458344,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173418-00",
+   "sample_count": 44142
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173427-00",
+   "max_ms": 1789234467257,
+   "min_ms": 1789234467256,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173427-00",
+   "sample_count": 5920
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173427-01",
+   "max_ms": 1789234468533,
+   "min_ms": 1789234467257,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173427-01",
+   "sample_count": 22708
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173428-00",
+   "max_ms": 1789234487774,
+   "min_ms": 1789234468573,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173428-00",
+   "sample_count": 112469
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173447-00",
+   "max_ms": 1789234496841,
+   "min_ms": 1789234487774,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173447-00",
+   "sample_count": 75991
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173456-00",
+   "max_ms": 1789234498512,
+   "min_ms": 1789234496841,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173456-00",
+   "sample_count": 16892
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173423-00",
+   "max_ms": 1789234531358,
+   "min_ms": 1789234498552,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173423-00",
+   "sample_count": 219843
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173529-00",
+   "max_ms": 1789234563207,
+   "min_ms": 1789234531399,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173529-00",
+   "sample_count": 159825
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173603-00",
+   "max_ms": 1789234567203,
+   "min_ms": 1789234563207,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173603-00",
+   "sample_count": 7497
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173607-00",
+   "max_ms": 1789234583663,
+   "min_ms": 1789234567203,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173607-00",
+   "sample_count": 131014
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173623-00",
+   "max_ms": 1789234594425,
+   "min_ms": 1789234583663,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173623-00",
+   "sample_count": 66986
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173634-00",
+   "max_ms": 1789234594426,
+   "min_ms": 1789234594425,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173634-00",
+   "sample_count": 6402
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173634-01",
+   "max_ms": 1789234607592,
+   "min_ms": 1789234594426,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173634-01",
+   "sample_count": 61804
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173647-00",
+   "max_ms": 1789234607593,
+   "min_ms": 1789234607592,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173647-00",
+   "sample_count": 6390
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173647-01",
+   "max_ms": 1789234624685,
+   "min_ms": 1789234607593,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173647-01",
+   "sample_count": 131852
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173704-00",
+   "max_ms": 1789234632129,
+   "min_ms": 1789234624685,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173704-00",
+   "sample_count": 76688
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173634-02",
+   "max_ms": 1789234637033,
+   "min_ms": 1789234632169,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173634-02",
+   "sample_count": 20471
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173717-00",
+   "max_ms": 1789234639968,
+   "min_ms": 1789234637033,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173717-00",
+   "sample_count": 30760
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173720-00",
+   "max_ms": 1789234648738,
+   "min_ms": 1789234640009,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173720-00",
+   "sample_count": 60762
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173728-00",
+   "max_ms": 1789234651458,
+   "min_ms": 1789234648764,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173728-00",
+   "sample_count": 19086
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173731-00",
+   "max_ms": 1789234678387,
+   "min_ms": 1789234651498,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173731-00",
+   "sample_count": 184188
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173758-00",
+   "max_ms": 1789234681984,
+   "min_ms": 1789234678387,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173758-00",
+   "sample_count": 12552
+  },
+  {
+   "has_video": false,
+   "id": "20260912-173801-00",
+   "max_ms": 1789234681985,
+   "min_ms": 1789234681984,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173801-00",
+   "sample_count": 6006
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173801-01",
+   "max_ms": 1789234774599,
+   "min_ms": 1789234681985,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173801-01",
+   "sample_count": 740979
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173934-00",
+   "max_ms": 1789234776468,
+   "min_ms": 1789234774639,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173934-00",
+   "sample_count": 12959
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173936-00",
+   "max_ms": 1789234794259,
+   "min_ms": 1789234776508,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173936-00",
+   "sample_count": 132647
+  },
+  {
+   "has_video": true,
+   "id": "20260912-173954-00",
+   "max_ms": 1789234801888,
+   "min_ms": 1789234794299,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-173954-00",
+   "sample_count": 56469
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174001-00",
+   "max_ms": 1789234815972,
+   "min_ms": 1789234801888,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174001-00",
+   "sample_count": 105718
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174016-00",
+   "max_ms": 1789234876950,
+   "min_ms": 1789234816012,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174016-00",
+   "sample_count": 516033
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174116-00",
+   "max_ms": 1789234877171,
+   "min_ms": 1789234876990,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174116-00",
+   "sample_count": 1771
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174117-00",
+   "max_ms": 1789234905118,
+   "min_ms": 1789234877212,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174117-00",
+   "sample_count": 207378
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174145-00",
+   "max_ms": 1789234918833,
+   "min_ms": 1789234905158,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174145-00",
+   "sample_count": 84515
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174158-00",
+   "max_ms": 1789234938770,
+   "min_ms": 1789234918833,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174158-00",
+   "sample_count": 173856
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174218-00",
+   "max_ms": 1789234965686,
+   "min_ms": 1789234938810,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174218-00",
+   "sample_count": 204481
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174245-00",
+   "max_ms": 1789234970267,
+   "min_ms": 1789234965727,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174245-00",
+   "sample_count": 36455
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174250-00",
+   "max_ms": 1789234972016,
+   "min_ms": 1789234970307,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174250-00",
+   "sample_count": 11895
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174252-00",
+   "max_ms": 1789234981904,
+   "min_ms": 1789234972056,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174252-00",
+   "sample_count": 67014
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174301-00",
+   "max_ms": 1789234991073,
+   "min_ms": 1789234981904,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174301-00",
+   "sample_count": 74059
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174311-00",
+   "max_ms": 1789234992077,
+   "min_ms": 1789234991113,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174311-00",
+   "sample_count": 6949
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174312-00",
+   "max_ms": 1789234993163,
+   "min_ms": 1789234992118,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174312-00",
+   "sample_count": 7578
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174313-00",
+   "max_ms": 1789234998110,
+   "min_ms": 1789234993203,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174313-00",
+   "sample_count": 20097
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174318-00",
+   "max_ms": 1789235003900,
+   "min_ms": 1789234998110,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174318-00",
+   "sample_count": 65795
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174323-00",
+   "max_ms": 1789235009281,
+   "min_ms": 1789235003940,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174323-00",
+   "sample_count": 26559
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174329-00",
+   "max_ms": 1789235009282,
+   "min_ms": 1789235009281,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174329-00",
+   "sample_count": 7052
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174307-00",
+   "max_ms": 1789235020753,
+   "min_ms": 1789235009282,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174307-00",
+   "sample_count": 94286
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174340-00",
+   "max_ms": 1789235025496,
+   "min_ms": 1789235020793,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174340-00",
+   "sample_count": 33168
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174345-00",
+   "max_ms": 1789235036736,
+   "min_ms": 1789235025536,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174345-00",
+   "sample_count": 84817
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174356-00",
+   "max_ms": 1789235038223,
+   "min_ms": 1789235036776,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174356-00",
+   "sample_count": 11217
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174358-00",
+   "max_ms": 1789235042722,
+   "min_ms": 1789235038263,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174358-00",
+   "sample_count": 30643
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174402-00",
+   "max_ms": 1789235047990,
+   "min_ms": 1789235042762,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174402-00",
+   "sample_count": 38090
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174408-00",
+   "max_ms": 1789235048633,
+   "min_ms": 1789235048030,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174408-00",
+   "sample_count": 4294
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174408-01",
+   "max_ms": 1789235049940,
+   "min_ms": 1789235048673,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174408-01",
+   "sample_count": 9991
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174409-00",
+   "max_ms": 1789235064172,
+   "min_ms": 1789235049980,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174409-00",
+   "sample_count": 119210
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174424-00",
+   "max_ms": 1789235089925,
+   "min_ms": 1789235064212,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174424-00",
+   "sample_count": 203315
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174449-00",
+   "max_ms": 1789235090448,
+   "min_ms": 1789235089965,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174449-00",
+   "sample_count": 3318
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174450-00",
+   "max_ms": 1789235098399,
+   "min_ms": 1789235090488,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174450-00",
+   "sample_count": 36183
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174413-00",
+   "max_ms": 1789235131264,
+   "min_ms": 1789235098399,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174413-00",
+   "sample_count": 286309
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174531-00",
+   "max_ms": 1789235133817,
+   "min_ms": 1789235131304,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174531-00",
+   "sample_count": 20018
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174533-00",
+   "max_ms": 1789235136591,
+   "min_ms": 1789235133857,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174533-00",
+   "sample_count": 19336
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174536-00",
+   "max_ms": 1789235146543,
+   "min_ms": 1789235136631,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174536-00",
+   "sample_count": 50061
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174546-00",
+   "max_ms": 1789235146545,
+   "min_ms": 1789235146544,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174546-00",
+   "sample_count": 7013
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174518-00",
+   "max_ms": 1789235166220,
+   "min_ms": 1789235146545,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174518-00",
+   "sample_count": 129047
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174606-00",
+   "max_ms": 1789235166816,
+   "min_ms": 1789235166220,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174606-00",
+   "sample_count": 32532
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174606-01",
+   "max_ms": 1789235172811,
+   "min_ms": 1789235166856,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174606-01",
+   "sample_count": 20843
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174612-00",
+   "max_ms": 1789235172812,
+   "min_ms": 1789235172811,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174612-00",
+   "sample_count": 6806
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174612-01",
+   "max_ms": 1789235175747,
+   "min_ms": 1789235172812,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174612-01",
+   "sample_count": 37420
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174615-00",
+   "max_ms": 1789235187837,
+   "min_ms": 1789235175788,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174615-00",
+   "sample_count": 77591
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174627-00",
+   "max_ms": 1789235244691,
+   "min_ms": 1789235187837,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174627-00",
+   "sample_count": 402906
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174724-00",
+   "max_ms": 1789235249498,
+   "min_ms": 1789235244731,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174724-00",
+   "sample_count": 26848
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174729-00",
+   "max_ms": 1789235260686,
+   "min_ms": 1789235249498,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174729-00",
+   "sample_count": 58432
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174740-00",
+   "max_ms": 1789235265738,
+   "min_ms": 1789235260686,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174740-00",
+   "sample_count": 35597
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174745-00",
+   "max_ms": 1789235265739,
+   "min_ms": 1789235265738,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174745-00",
+   "sample_count": 6667
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174745-01",
+   "max_ms": 1789235275992,
+   "min_ms": 1789235265739,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174745-01",
+   "sample_count": 54794
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174755-00",
+   "max_ms": 1789235287771,
+   "min_ms": 1789235275992,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174755-00",
+   "sample_count": 65648
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174807-00",
+   "max_ms": 1789235287773,
+   "min_ms": 1789235287771,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174807-00",
+   "sample_count": 8503
+  },
+  {
+   "has_video": false,
+   "id": "20260912-174729-01",
+   "max_ms": 1789235298419,
+   "min_ms": 1789235287773,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174729-01",
+   "sample_count": 69671
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174818-00",
+   "max_ms": 1789235305315,
+   "min_ms": 1789235298419,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174818-00",
+   "sample_count": 94365
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174825-00",
+   "max_ms": 1789235314395,
+   "min_ms": 1789235305355,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174825-00",
+   "sample_count": 62112
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174834-00",
+   "max_ms": 1789235315180,
+   "min_ms": 1789235314435,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174834-00",
+   "sample_count": 5268
+  },
+  {
+   "has_video": true,
+   "id": "20260912-174835-00",
+   "max_ms": 1789235349013,
+   "min_ms": 1789235315221,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-174835-00",
+   "sample_count": 239483
+  },
+  {
+   "has_video": true,
+   "id": "20260912-180615-00",
+   "max_ms": 1789236389666,
+   "min_ms": 1789236375820,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-180615-00",
+   "sample_count": 60159
+  },
+  {
+   "has_video": false,
+   "id": "20260912-180645-00",
+   "max_ms": 1789236408973,
+   "min_ms": 1789236405615,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-180645-00",
+   "sample_count": 20268
+  },
+  {
+   "has_video": false,
+   "id": "20260912-180649-00",
+   "max_ms": 1789236410139,
+   "min_ms": 1789236409013,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-180649-00",
+   "sample_count": 7257
+  },
+  {
+   "has_video": true,
+   "id": "20260912-182626-00",
+   "max_ms": 1789239585460,
+   "min_ms": 1789237586836,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-182626-00",
+   "sample_count": 16490000
+  },
+  {
+   "has_video": true,
+   "id": "20260912-190658-00",
+   "max_ms": 1789240445587,
+   "min_ms": 1789240018882,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-190658-00",
+   "sample_count": 3482209
+  },
+  {
+   "has_video": true,
+   "id": "20260912-191415-00",
+   "max_ms": 1789240944488,
+   "min_ms": 1789240455455,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-191415-00",
+   "sample_count": 3996076
+  },
+  {
+   "has_video": true,
+   "id": "20260912-192229-00",
+   "max_ms": 1789243202290,
+   "min_ms": 1789240949092,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-192229-00",
+   "sample_count": 19055872
+  },
+  {
+   "has_video": true,
+   "id": "20260912-200006-00",
+   "max_ms": 1789243320093,
+   "min_ms": 1789243206210,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-200006-00",
+   "sample_count": 889771
+  },
+  {
+   "has_video": true,
+   "id": "20260912-202137-00",
+   "max_ms": 1789244642005,
+   "min_ms": 1789244497189,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-202137-00",
+   "sample_count": 1306284
+  },
+  {
+   "has_video": true,
+   "id": "20260912-202903-00",
+   "max_ms": 1789245005393,
+   "min_ms": 1789244943763,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-202903-00",
+   "sample_count": 513968
+  },
+  {
+   "has_video": true,
+   "id": "20260912-203436-00",
+   "max_ms": 1789246248714,
+   "min_ms": 1789245276375,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-203436-00",
+   "sample_count": 7501196
+  },
+  {
+   "has_video": true,
+   "id": "20260912-214455-00",
+   "max_ms": 1789250252979,
+   "min_ms": 1789249495440,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-214455-00",
+   "sample_count": 6393371
+  },
+  {
+   "has_video": true,
+   "id": "20260912-220525-00",
+   "max_ms": 1789250889776,
+   "min_ms": 1789250725144,
+   "path": "F:\\lhr\\data\\tsdb\\20260912-220525-00",
+   "sample_count": 1380966
+  },
+  {
+   "has_video": true,
+   "id": "20260920-215218-00",
+   "max_ms": 1789941348350,
+   "min_ms": 1789941138393,
+   "path": "F:\\lhr\\data\\tsdb\\20260920-215218-00",
+   "sample_count": 1878764
+  },
+  {
+   "has_video": true,
+   "id": "20260924-173709-00",
+   "max_ms": 1790271484147,
+   "min_ms": 1790271429761,
+   "path": "F:\\lhr\\data\\tsdb\\20260924-173709-00",
+   "sample_count": 492355
+  },
+  {
+   "has_video": true,
+   "id": "20260924-185752-00",
+   "max_ms": 1790278525843,
+   "min_ms": 1790276272432,
+   "path": "F:\\lhr\\data\\tsdb\\20260924-185752-00",
+   "sample_count": 16377697
+  },
+  {
+   "has_video": false,
+   "id": "20260924-195800-00",
+   "max_ms": 1790279893873,
+   "min_ms": 1790279880707,
+   "path": "F:\\lhr\\data\\tsdb\\20260924-195800-00",
+   "sample_count": 178537
+  },
+  {
+   "has_video": true,
+   "id": "20260927-172055-00",
+   "max_ms": 1790530841036,
+   "min_ms": 1790529655465,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-172055-00",
+   "sample_count": 7031095
+  },
+  {
+   "has_video": true,
+   "id": "20260927-175438-00",
+   "max_ms": 1790532471068,
+   "min_ms": 1790531678488,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-175438-00",
+   "sample_count": 3742231
+  },
+  {
+   "has_video": true,
+   "id": "20260927-175438-01",
+   "max_ms": 1790532471068,
+   "min_ms": 1790531678488,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-175438-01",
+   "sample_count": 3742231
+  },
+  {
+   "has_video": true,
+   "id": "20260927-180030-00",
+   "max_ms": 1790532471068,
+   "min_ms": 1790532030254,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-180030-00",
+   "sample_count": 2955220
+  },
+  {
+   "has_video": true,
+   "id": "20260927-193400-00",
+   "max_ms": 1790538193531,
+   "min_ms": 1790537640520,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-193400-00",
+   "sample_count": 3203141
+  },
+  {
+   "has_video": true,
+   "id": "20260927-193400-01",
+   "max_ms": 1790538193531,
+   "min_ms": 1790537640520,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-193400-01",
+   "sample_count": 3203141
+  },
+  {
+   "has_video": true,
+   "id": "20260927-193400-02",
+   "max_ms": 1790538193531,
+   "min_ms": 1790537640520,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-193400-02",
+   "sample_count": 3203141
+  },
+  {
+   "has_video": true,
+   "id": "20260927-211337-00",
+   "max_ms": 1790544821004,
+   "min_ms": 1790543617845,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-211337-00",
+   "sample_count": 9285729
+  },
+  {
+   "has_video": true,
+   "id": "20260927-211337-01",
+   "max_ms": 1790544821004,
+   "min_ms": 1790543617845,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-211337-01",
+   "sample_count": 9285729
+  },
+  {
+   "has_video": true,
+   "id": "20260927-211337-02",
+   "max_ms": 1790544821004,
+   "min_ms": 1790543617845,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-211337-02",
+   "sample_count": 9285729
+  },
+  {
+   "has_video": true,
+   "id": "20260927-211337-03",
+   "max_ms": 1790544821004,
+   "min_ms": 1790543617845,
+   "path": "F:\\lhr\\data\\tsdb\\20260927-211337-03",
+   "sample_count": 9285729
+  },
+  {
+   "has_video": true,
+   "id": "20261002-203909-00",
+   "max_ms": 1790974144527,
+   "min_ms": 1790973549448,
+   "path": "F:\\lhr\\data\\tsdb\\20261002-203909-00",
+   "sample_count": 5178044
+  },
+  {
+   "has_video": true,
+   "id": "20261002-210357-00",
+   "max_ms": 1790975081140,
+   "min_ms": 1790975037469,
+   "path": "F:\\lhr\\data\\tsdb\\20261002-210357-00",
+   "sample_count": 178454
+  },
+  {
+   "has_video": false,
+   "id": "20261002-214129-00",
+   "max_ms": 1790977324336,
+   "min_ms": 1790977289872,
+   "path": "F:\\lhr\\data\\tsdb\\20261002-214129-00",
+   "sample_count": 364769
+  },
+  {
+   "has_video": true,
+   "id": "20261017-012401-00",
+   "max_ms": 1792200735992,
+   "min_ms": 1792200241097,
+   "path": "F:\\lhr\\data\\tsdb\\20261017-012401-00",
+   "sample_count": 4352263
+  },
+  {
+   "has_video": false,
+   "id": "20261017-020832-00",
+   "max_ms": 1792203075614,
+   "min_ms": 1792202912185,
+   "path": "F:\\lhr\\data\\tsdb\\20261017-020832-00",
+   "sample_count": 1491377
+  }
+ ],
+ "type": "catalog_result"
+}

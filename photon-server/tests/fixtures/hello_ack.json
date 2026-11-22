@@ -1,0 +1,215 @@
+{
+ "active_source": {
+  "host": "127.0.0.1",
+  "kind": "daq_tcp",
+  "port": 6500
+ },
+ "drive_days": [
+  {
+   "date": "2026-07-18",
+   "duration_s": 83.385,
+   "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-18",
+   "session_count": 1,
+   "sessions": [
+    {
+     "duration_s": 83.385,
+     "id": "2026-07-18-01",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-18\\session-01.log",
+     "speed_max_mps": 4.551916599273682,
+     "start_ms": 1784435898767
+    }
+   ]
+  },
+  {
+   "date": "2026-07-19",
+   "duration_s": 500.026,
+   "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-19",
+   "session_count": 4,
+   "sessions": [
+    {
+     "duration_s": 113.284,
+     "id": "2026-07-19-01",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-19\\session-01.log",
+     "speed_max_mps": 2.809378147125244,
+     "start_ms": 1784490236474
+    },
+    {
+     "duration_s": 119.192,
+     "id": "2026-07-19-02",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-19\\session-02.log",
+     "speed_max_mps": 3.3968892097473145,
+     "start_ms": 1784500539368
+    },
+    {
+     "duration_s": 176.143,
+     "id": "2026-07-19-03",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-19\\session-03.log",
+     "speed_max_mps": 6.375146865844727,
+     "start_ms": 1784501954319
+    },
+    {
+     "duration_s": 91.407,
+     "id": "2026-07-19-04",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-19\\session-04.log",
+     "speed_max_mps": 2.708226442337036,
+     "start_ms": 1784502476780
+    }
+   ]
+  },
+  {
+   "date": "2026-07-23",
+   "duration_s": 16476.701999999997,
+   "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23",
+   "session_count": 10,
+   "sessions": [
+    {
+     "duration_s": 658.098,
+     "id": "2026-07-23-01",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-01.log",
+     "speed_max_mps": 26.92,
+     "start_ms": 1784820994937
+    },
+    {
+     "duration_s": 3055.293,
+     "id": "2026-07-23-02",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-02.log",
+     "speed_max_mps": 27.150000000000002,
+     "start_ms": 1784821872444
+    },
+    {
+     "duration_s": 7215.177,
+     "id": "2026-07-23-03",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-03.log",
+     "speed_max_mps": 20.82,
+     "start_ms": 1784825289055
+    },
+    {
+     "duration_s": 422.362,
+     "id": "2026-07-23-04",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-04.log",
+     "speed_max_mps": 18.75,
+     "start_ms": 1784832841002
+    },
+    {
+     "duration_s": 354.517,
+     "id": "2026-07-23-05",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-05.log",
+     "speed_max_mps": 20.36,
+     "start_ms": 1784833673139
+    },
+    {
+     "duration_s": 1899.517,
+     "id": "2026-07-23-06",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-06.log",
+     "speed_max_mps": 22.44,
+     "start_ms": 1784834331994
+    },
+    {
+     "duration_s": 828.193,
+     "id": "2026-07-23-07",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-07.log",
+     "speed_max_mps": 22.21,
+     "start_ms": 1784836726528
+    },
+    {
+     "duration_s": 1229.325,
+     "id": "2026-07-23-08",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-08.log",
+     "speed_max_mps": 40.04,
+     "start_ms": 1784841790574
+    },
+    {
+     "duration_s": 113.117,
+     "id": "2026-07-23-09",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-09.log",
+     "speed_max_mps": 20.36,
+     "start_ms": 1784843340076
+    },
+    {
+     "duration_s": 701.103,
+     "id": "2026-07-23-10",
+     "path": "F:\\lhr\\_logs_extract\\on_track\\days\\2026-07-23\\session-10.log",
+     "speed_max_mps": 14.15,
+     "start_ms": 1784844485846
+    }
+   ]
+  },
+  {
+   "date": "2026-09-24",
+   "duration_s": 2670.404,
+   "path": "F:\\lhr\\data\\segments",
+   "session_count": 1,
+   "sessions": [
+    {
+     "duration_s": 2670.404,
+     "id": "segments-2026-09-24",
+     "path": "F:\\lhr\\data\\segments",
+     "speed_max_mps": 0,
+     "start_ms": 1790277224233
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "duration_s": 18131.538,
+   "path": "F:\\lhr\\data\\segments",
+   "session_count": 1,
+   "sessions": [
+    {
+     "duration_s": 18131.538,
+     "id": "segments-2026-09-27",
+     "path": "F:\\lhr\\data\\segments",
+     "speed_max_mps": 0,
+     "start_ms": 1790529655525
+    }
+   ]
+  },
+  {
+   "date": "2026-10-02",
+   "duration_s": 3774.667,
+   "path": "F:\\lhr\\data\\segments",
+   "session_count": 1,
+   "sessions": [
+    {
+     "duration_s": 3774.667,
+     "id": "segments-2026-10-02",
+     "path": "F:\\lhr\\data\\segments",
+     "speed_max_mps": 0,
+     "start_ms": 1790973549448
+    }
+   ]
+  },
+  {
+   "date": "2026-10-16",
+   "duration_s": 163.429,
+   "path": "F:\\lhr\\data\\segments",
+   "session_count": 1,
+   "sessions": [
+    {
+     "duration_s": 163.429,
+     "id": "segments-2026-10-16",
+     "path": "F:\\lhr\\data\\segments",
+     "speed_max_mps": 0,
+     "start_ms": 1792202912185
+    }
+   ]
+  }
+ ],
+ "features": [
+  "daq_tcp",
+  "log_replay",
+  "pcan",
+  "dbc",
+  "track_sim",
+  "video",
+  "history",
+  "video_locate",
+  "live_tail",
+  "video_clock",
+  "analysis_compute",
+  "catalog"
+ ],
+ "protocol_version": 1,
+ "server": "photon-backend",
+ "type": "hello_ack"
+}

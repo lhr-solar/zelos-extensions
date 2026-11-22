@@ -1,0 +1,26 @@
+name = "Photon"
+version = "0.1.0"
+description = "Browse Longhorn Racing Solar's Photon telemetry server from Zelos: list the stored car sessions, load any session or time window into the app, and upload curated sessions to Zelos Cloud tagged Photon."
+author = "Longhorn Racing Solar"
+repository = "https://github.com/lhr-solar/zelos-extensions"
+keywords = ["photon", "lhrs", "solar", "telemetry", "can", "dbc", "history", "tsdb", "upload", "vehicle"]
+categories = ["Automotive"]
+readme = "README.md"
+
+[zelos]
+version = ">=26.0.10"
+
+[config]
+schema = "config.schema.json"
+
+[agent]
+runtime = "python"
+entry = "main.py"
+python_version = "3.11"
+
+[agent.stop]
+# A load or upload in progress gets this long to cancel and flush.
+grace_seconds = 20
+
+[package]
+paths = ["main.py", "zelos_extension_photon", "README.md", "config.schema.json"]
