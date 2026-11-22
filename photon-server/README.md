@@ -12,7 +12,7 @@ It only reads Photon, through the same endpoints photon.html uses. It never chan
 | Action | What it does | Zelos AI |
 |---|---|---|
 | **List Sessions** | Lists Photon's stored sessions, grouped by local day (newest first), with start time, length, samples and whether video exists | Runs without asking (read-only) |
-| **Load Session** | Pick a day and a session, plus optional resolution, start offset and duration. It builds the trace, seals it as TRZ2, uploads it to Zelos Cloud **tagged `Photon`** (plus any extra tags), opens it in the app and returns the share link. Loading the same thing again on this laptop reuses that trace. Signals use the CAN extension's names (`CAN` / `CarCAN/<Message>` / `<Signal>`, event type `zelos.can.message.v1`), so CAN layouts such as High Noon work on Photon traces | Asks first |
+| **Load Session** | Pick a day and a session, plus optional resolution, start offset and duration. Array messages (PDU channels, battery taps) are read raw and also split per channel/tap. It builds the trace, seals it as TRZ2, uploads it to Zelos Cloud **tagged `Photon`** (plus any extra tags), opens it in the app and returns the share link. Loading the same thing again on this laptop reuses that trace. Signals use the CAN extension's names (`CAN` / `CarCAN/<Message>` / `<Signal>`, event type `zelos.can.message.v1`), so CAN layouts such as High Noon work on Photon traces | Asks first |
 | **Load Session (Advanced)** | Load Session plus every other option: *Destination* (*Zelos Cloud*, a local *Trace file* in *Documents/Photon Traces*, or the *Live workspace* for recent data), a signal subset, *Allow large transfers*, trace name, extra tags, open in app, *Upload again* | Asks first |
 | **Job Status** | Progress and the result of the running or last load/upload | Read-only |
 | **Cancel Job** | Stops the running load or upload after its current chunk | Asks first |
@@ -34,6 +34,19 @@ The Zelos app keeps live data in memory and **prunes samples older than about 8 
 ### Same names as the CAN extension
 
 Zelos layouts bind each signal by `source`, `message` (event), `signal` (field) and `eventType`. The CAN extension writes source `CAN`, events `<bus>/<Message>` and event type `zelos.can.message.v1`, so Photon traces are written the same way. Photon and the HighNoon DBCs use the same message and signal names (checked for the Pedals tab), so one layout serves live PCAN data and Photon traces. Live-workspace loads use their own `photon-<session id>` source so they can't collide with a running CAN extension.
+
+### Array messages (PDU channels, battery taps)
+
+`PDU_Status_Arr` (indexed by `HSS_Channel_idx`, 16 channels) and `BPS_Voltage_Aggregate_Arr`, `BPS_Temperature_Aggregate_Arr` and `BPS_Temp_ADC_Aggregate_Arr` (indexed by `BPS_Tap_idx`, 32 taps) carry one slot per frame. `zelos_extension_photon/arrays.py` handles them:
+
+- **Always read raw.** Photon's rollup levels average every signal in a bucket, index included. A 1 s `HSS_Channel_idx` of 13.5 or 7.58 mixes channels. At the 1 s, 100 ms and 10 s resolutions these messages are fetched separately at raw, in 5-minute pieces, and the averaged rows are discarded.
+- **Thinned per slot.** At those resolutions the last frame of each channel or tap per bucket is kept, so traces stay small while every slot stays correct. At raw resolution every frame is kept.
+- **Split per slot.** Each trace gets the "PDU Channel Live Splitter LilShah DBC" notebook's sources (`PDUChannels_LilShah`, `PDUChannelPower_LilShah`, `PDUChannelOverall_LilShah`): same fields, DBC labels and Overall math (total of each channel's latest power, highest output). The battery taps follow the same pattern: `BPSVoltageTaps_LilShah`, `BPSTemperatureTaps_LilShah` and `BPSTempADCTaps_LilShah` (`Tap_00`–`Tap_31`), plus `BPSVoltageOverall_LilShah` and `BPSTemperatureOverall_LilShah` (min, max, spread, which taps, faulted taps, taps reporting).
+- **Live-workspace loads only thin.** In the live workspace the live notebooks own the `_LilShah` sources, so the extension doesn't write them there.
+
+Raw data also often has several frames of one message at the same timestamp, because Photon stamps a whole CANP batch with one time. Every signal lists those frames in the same order, so the k-th row of each signal at a timestamp is paired into the k-th frame instead of overwriting the earlier ones.
+
+`TRACE_FORMAT` in `loader.py` is part of the upload-record key. Bump it whenever what goes into a trace changes, so laptops stop reusing older traces.
 
 ### Reusing uploads
 
@@ -105,4 +118,6 @@ The actions show up in the app's Action panel as `Photon/...` while it runs. To 
 ## Roadmap
 
 - **Phase 2:** live car data from the Oracle CANP tee (decoder and parser prototyped in the Phase 0 spike).
-- **Phase 3:** marketplace release, shared layouts for the Pit, Dashboard, Dynamics and PDU screens, and a signal glossary for Zelos AI.
+- **Live battery split:** a live-CAN counterpart (notebook or shared splitter) for the battery taps, like the PDU notebook.
+- **High Noon battery tabs:** voltage and temperature panels on the `BPS…_LilShah` sources.
+- **Phase 3:** marketplace release, shared layouts for the Pit, Dashboard and Dynamics screens, and a signal glossary for Zelos AI.

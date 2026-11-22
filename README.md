@@ -52,6 +52,21 @@ By default it uploads the session to **Zelos Cloud** as a trace **tagged `Photon
 - **Trace file**: saves a private `.trz` to **Documents/Photon Traces**. Open it with **Open trace** on Home, or **DATA SOURCES → Add trace → File** in the right sidebar (`Ctrl+J`).
 - **Live workspace (recent data only)**: streams into the live view, but only for data from the last 7.5 hours (Zelos drops older live data within a minute).
 
+**PDU channels and battery taps come pre-split.** Some CAN messages carry one slot of an array per frame: the PDU reports one of 16 channels at a time, and the BPS reports one of 32 voltage or temperature taps. Every Photon trace also contains these split per slot, with the same sources the live PDU notebook writes, so **High Noon → LV Power Draw** works on Photon traces too:
+
+| Source | Events | Fields |
+|---|---|---|
+| `PDUChannels_LilShah` | `Channel_00`–`Channel_15` | enabled, fault, voltage (V), current (A) |
+| `PDUChannelPower_LilShah` | `Channel_00`–`Channel_15` | power (W) = voltage × current |
+| `PDUChannelOverall_LilShah` | `Overall` | total_power (W), highest_output, highest_channel_index |
+| `BPSVoltageTaps_LilShah` | `Tap_00`–`Tap_31` | voltage (V), fault, age (ms) |
+| `BPSVoltageOverall_LilShah` | `Overall` | min/max_voltage, spread, min_tap, max_tap, faulted_taps, taps_reporting |
+| `BPSTemperatureTaps_LilShah` | `Tap_00`–`Tap_31` | temperature (°C), fault, age (ms) |
+| `BPSTemperatureOverall_LilShah` | `Overall` | the same summary for temperature |
+| `BPSTempADCTaps_LilShah` | `Tap_00`–`Tap_31` | adc (raw thermistor reading) |
+
+Channel names and fault labels come from the lilShah DBC. These messages are always read from Photon's raw data, because its 1 s and 100 ms data averages the channel index across slots. At those resolutions each channel or tap keeps its last value per second (or per 100 ms).
+
 ### 3. Long jobs
 Load Session answers within 4 minutes. Anything longer keeps running in the background. Run **Job Status** to see progress and the final result, or **Cancel Job** to stop.
 
@@ -63,6 +78,7 @@ Load Session answers within 4 minutes. Anything longer keeps running in the back
 | Load fails with *"no 'Photon' tag"* | An lhrs org owner must create the `Photon` tag once in console2.zeloscloud.io → Tags |
 | Load fails with a sign-in or storage error | Sign in to the lhrs org in Zelos. If the org's Cloud storage is full, ask an owner, or use Destination **Trace file** |
 | A reused trace was deleted from the Cloud | Load again with **Load Session (Advanced)** → **Upload again** |
+| LV Power Draw (or other PDU/battery panels) empty on a Photon trace | Traces loaded before the array split was added don't have the `_LilShah` sources. Load again; the extension won't reuse those older traces |
 | High Noon panels are empty on a Photon trace | Check that the extension's **CAN source name** / **CAN bus name** settings match your CAN extension (defaults `CAN` / `CarCAN`). Traces uploaded before this naming (signals under `photon/`) need **Load Session (Advanced)** → **Upload again** |
 | *"roughly N GB of Photon data"* | Pick a coarser resolution or a shorter window, or tick **Allow large transfers** |
 | No EXTENSIONS or ACTIONS section | You're viewing a trace. Switch to the live workspace connected to `localhost` |
