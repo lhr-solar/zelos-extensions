@@ -47,7 +47,17 @@ Zelos layouts bind each signal by `source`, `message` (event), `signal` (field) 
 
 Raw data also often has several frames of one message at the same timestamp, because Photon stamps a whole CANP batch with one time. Every signal lists those frames in the same order, so the k-th row of each signal at a timestamp is paired into the k-th frame instead of overwriting the earlier ones.
 
-`TRACE_FORMAT` in `loader.py` (now 3) is part of the upload-record key. Bump it whenever what goes into a trace changes, so laptops stop reusing older traces.
+`TRACE_FORMAT` in `loader.py` (now 4) is part of the upload-record key. Bump it whenever what goes into a trace changes, so laptops stop reusing older traces.
+
+### Status labels
+
+`zelos_extension_photon/value_tables.py` holds the DBC value tables for `BPS_Status` (fault code, charge/regen OK, contactors, segment statuses) and `BPS_Command`. They're attached to Photon traces so STATE panels show labels instead of codes, as on live CAN data.
+
+### Live counterpart: notebooks
+
+`notebooks/BPS-Tap-Live-Splitter-LilShah-DBC.md` is a Zelos notebook that does the battery split on live CAN data. It polls `CAN/CarCAN/BPS_*_Aggregate_Arr` and writes the same `BPS*_LilShah` sources with the same fields and summary math as `arrays.py`. It was checked against `arrays.py` on replayed raw Photon frames: all 222 latest tap and summary values matched. Its `can_prefix` and `source_suffix` params let it run against a test feed without touching the real sources. Copy it into *Documents/Zelos Notebooks* to use it.
+
+`tools/add_battery_tab.py` adds or refreshes the **Battery** tab in a layout (default High Noon), the same way `tools/add_photon_tab.py` does for the Photon tab.
 
 ### Reusing uploads
 
@@ -119,6 +129,4 @@ The actions show up in the app's Action panel as `Photon/...` while it runs. To 
 ## Roadmap
 
 - **Phase 2:** live car data from the Oracle CANP tee (decoder and parser prototyped in the Phase 0 spike).
-- **Live battery split:** a live-CAN counterpart (notebook or shared splitter) for the battery taps, like the PDU notebook.
-- **High Noon battery tabs:** voltage and temperature panels on the `BPS…_LilShah` sources.
 - **Phase 3:** marketplace release, shared layouts for the Pit, Dashboard and Dynamics screens, and a signal glossary for Zelos AI.

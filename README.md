@@ -68,6 +68,13 @@ By default it uploads the session to **Zelos Cloud** as a trace **tagged `Photon
 
 Channel names and fault labels come from the lilShah DBC. MPPT power is computed from voltage and current in the same raw frame, so the derived data lives inside the trace. Notebooks that write derived data with old timestamps put it in the live workspace, where Zelos deletes it within a minute. These messages are always read from Photon's raw data, because its 1 s and 100 ms data averages the channel index across slots. At those resolutions each channel or tap keeps its last value per second (or per 100 ms).
 
+### Battery: live and historical
+
+High Noon's **Battery** tab shows the pack (voltage, average temperature, precharge voltages), the lowest and highest cell voltage and temperature with their taps, how many taps are faulted, the BPS fault and contactor states, the eight segment statuses, min/max trends, and tables of all 32 tap voltages, temperatures and faults.
+
+- **Historical:** load any session with Photon. The trace already carries everything the tab needs, with status codes shown as DBC labels ("Closed", "Overtemperature").
+- **Live:** with the CAN extension running, open the **BPS Tap Live Splitter LilShah DBC** notebook (in `photon-server/notebooks/`; copy it into your *Documents/Zelos Notebooks* folder) and run it. It splits the live battery arrays into the same sources Photon traces use and keeps going in the background, so the same tab fills in live. The PDU Channel Live Splitter does the same for LV Power Draw.
+
 ### 3. Long jobs
 Load Session answers within 4 minutes. Anything longer keeps running in the background. Run **Job Status** to see progress and the final result, or **Cancel Job** to stop.
 

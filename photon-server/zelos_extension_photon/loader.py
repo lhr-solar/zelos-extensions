@@ -32,6 +32,7 @@ from zelos_sdk import DataType, TraceEventFieldMetadata
 from .arrays import ARRAY_MESSAGES, ArrayRouter, pair_frames
 from .photon import CatalogSession, PhotonClient, Row
 from .sessions import DISCOVERY_LEVEL, Window, chunks
+from .value_tables import VALUE_TABLES
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +47,8 @@ CAN_MESSAGE_EVENT_TYPE = "zelos.can.message.v1"
 # Bump when what goes into a trace changes, so the per-laptop upload record stops reusing older traces.
 # 2: array messages read raw and split per slot; frames sharing a timestamp no longer dropped.
 # 3: MPPTPower_LilShah (MPPT input/output power) computed per raw frame.
-TRACE_FORMAT = 3
+# 4: DBC value tables (labels) on BPS status/command fields.
+TRACE_FORMAT = 4
 
 
 @dataclass(frozen=True)
@@ -262,6 +264,20 @@ def pump(client: PhotonClient, s: CatalogSession, window: Window, level: int, si
     return totals
 
 
+def add_value_tables(source: Any, schema: Schema, naming: Naming) -> int:
+    """Attach DBC labels to status fields present in this trace. Returns how many tables were added."""
+    added = 0
+    for msg, tables in VALUE_TABLES.items():
+        for fld, table in tables.items():
+            if fld in schema.get(msg, {}):
+                try:
+                    source.add_value_table(naming.event(msg), sanitize(fld, "field"), table)
+                    added += 1
+                except Exception as e:  # labels are a nicety; never fail a load over one
+                    logger.warning("value table %s.%s not added: %s", msg, fld, e)
+    return added
+
+
 def make_router(schema: Schema, level: int, derive: bool) -> ArrayRouter:
     router = ArrayRouter(present=set(schema), level=level, derive=derive)
     router.signals = {m: sorted(schema[m]) for m in router.present}
@@ -340,6 +356,7 @@ def write_trace(client: PhotonClient, s: CatalogSession, window: Window, level: 
         with zelos_sdk.TraceWriter(str(path), namespace=ns):
             source = zelos_sdk.TraceSource(naming.source, namespace=ns)
             declare(source, schema, naming=naming)
+            add_value_tables(source, schema, naming)
             router = make_router(schema, level, derive=True)
             derived: dict[str, Source] = {}
             for src_name, events in router.derived_sources().items():

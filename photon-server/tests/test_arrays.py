@@ -247,3 +247,21 @@ def test_live_loads_do_not_compute_mppt_power():
         S, Window(0, 4000), 2, None, Progress())
     assert res["split_records"] == 0 and list(made) == ["photon-20260927-211337-00"]
     assert len(client.calls) == 2  # discovery + the 1 s load; no extra raw fetch
+
+
+def test_status_fields_get_dbc_labels():
+    from zelos_extension_photon.loader import add_value_tables
+
+    class Src:
+        def __init__(self):
+            self.tables = {}
+
+        def add_value_table(self, event, field, table):
+            self.tables[(event, field)] = table
+
+    src = Src()
+    schema = {"BPS_Status": {"BPS_Fault": "", "HV_Plus_Contactor_State": "", "Main_Battery_Voltage": "V"},
+              "Pedal_Status": {"AccelPedal_Main_Pos": "%"}}
+    assert add_value_tables(src, schema, can_naming()) == 2
+    assert src.tables[("CarCAN/BPS_Status", "BPS_Fault")][4] == "Overtemperature"
+    assert src.tables[("CarCAN/BPS_Status", "HV_Plus_Contactor_State")] == {0: "Open", 1: "Closed"}
