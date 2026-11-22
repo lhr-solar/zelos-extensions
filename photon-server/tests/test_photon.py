@@ -81,3 +81,32 @@ def test_stream_rows_retries_connection_errors(monkeypatch):
     monkeypatch.setattr(photon.time, "sleep", lambda s: None)
     assert [r.value for r in c.stream_rows("s", 0, 9, 2)] == [3.0]
     assert len(attempts) == 3
+
+
+def test_busy_exports_wait_for_photons_single_slot(monkeypatch):
+    c = PhotonClient("https://h", "pw")
+    answers = [_Resp(503, []), _Resp(503, []), _Resp(200, [b"t_ms,message,signal,unit,value", b"1,M,S,,7"])]
+    monkeypatch.setattr(c._http, "get", lambda *a, **k: answers.pop(0))
+    monkeypatch.setattr(photon.time, "sleep", lambda s: None)
+    assert [r.value for r in c.stream_rows("s", 0, 9, 2)] == [7.0]
+    assert answers == []
+
+
+def test_busy_for_too_long_is_a_clear_error(monkeypatch):
+    c = PhotonClient("https://h", "pw", busy_wait_s=0)
+    monkeypatch.setattr(c._http, "get", lambda *a, **k: _Resp(503, []))
+    with pytest.raises(PhotonError, match="busy with another export"):
+        list(c.stream_rows("s", 0, 9, 2))
+
+
+def test_empty_export_means_no_rows(monkeypatch):
+    c = PhotonClient("https://h", "pw")
+    monkeypatch.setattr(c._http, "get", lambda *a, **k: _Resp(200, []))
+    assert list(c.stream_rows("s", 0, 9, 5)) == []
+
+
+def test_other_bad_headers_still_fail(monkeypatch):
+    c = PhotonClient("https://h", "pw")
+    monkeypatch.setattr(c._http, "get", lambda *a, **k: _Resp(200, [b"<html>login</html>"]))
+    with pytest.raises(PhotonError, match="Unexpected export.csv header"):
+        list(c.stream_rows("s", 0, 9, 5))

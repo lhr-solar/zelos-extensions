@@ -49,13 +49,13 @@ def loc(x: float, y: float, w: float, h: float) -> dict:
 def value(key: str, title: str, location: dict, signals: list[dict], description: str, columns: int) -> dict:
     return {"id": _id(key), "kind": "VALUE", "title": title, "location": location, "signal": signals[0],
             "signals": signals, "options": {"columnCount": columns, "description": description, "fontSize": 22,
-                                            "showEmptySignals": True, "showFullSignalName": False}}
+                                            "showEmptySignals": True, "showFullSignalName": True}}
 
 
 def state(key: str, title: str, location: dict, signals: list[dict]) -> dict:
     return {"id": _id(key), "kind": "STATE", "title": title, "location": location, "signals": signals,
             "options": {"alignStackedAxes": True, "fontSize": 8, "hideXAxis": False, "showEmptySignals": True,
-                        "showFullSignalName": False, "showLiveValues": True,
+                        "showFullSignalName": True, "showLiveValues": True,
                         "legend": {"placement": "left", "sizePercent": {"left": 22}, "visible": True}}}
 
 
@@ -64,13 +64,13 @@ def plot(key: str, title: str, location: dict, signals: list[dict]) -> dict:
             "options": {"alignStackedAxes": True, "fillArea": False, "hideXAxis": False, "hideYAxis": False,
                         "legend": {"placement": "bottom", "visible": True}, "linePathMode": "linear",
                         "linePattern": "solid", "lineWidth": 1, "markerSize": 3, "markerVisibility": "auto",
-                        "showEmptySignals": True, "showFullSignalName": False, "showLiveValues": True,
+                        "showEmptySignals": True, "showFullSignalName": True, "showLiveValues": True,
                         "yAxisLayout": "shared", "yAxisNumberFormat": "auto"}}
 
 
 def table(key: str, title: str, location: dict, signals: list[dict]) -> dict:
     return {"id": _id(key), "kind": "TABLE", "title": title, "location": location, "signals": signals,
-            "options": {"showEmptySignals": True, "showFullSignalName": False}}
+            "options": {"showEmptySignals": True, "showFullSignalName": True}}
 
 
 def battery_tab() -> dict:
@@ -102,11 +102,11 @@ def battery_tab() -> dict:
         plot("ttrend", "Cell temperature range", loc(6, 3.4, 6, 1.1), [
             derived(to, "Overall", "min_temperature"), derived(to, "Overall", "max_temperature"),
             can("BPS_Status", "Main_Battery_Avg_Temperature")]),
-        table("vtaps", "Tap voltages", loc(0, 4.5, 4, 2.6), [
+        table("vtaps", "Tap voltages", loc(0, 4.5, 6, 2.6), [
             derived("BPSVoltageTaps_LilShah", f"Tap_{i:02d}", "voltage") for i in taps]),
-        table("ttaps", "Tap temperatures", loc(4, 4.5, 4, 2.6), [
+        table("ttaps", "Tap temperatures", loc(6, 4.5, 6, 2.6), [
             derived("BPSTemperatureTaps_LilShah", f"Tap_{i:02d}", "temperature") for i in taps]),
-        table("faults", "Tap faults", loc(8, 4.5, 4, 2.6), [
+        table("faults", "Tap faults", loc(0, 7.1, 12, 2.6), [
             *(derived("BPSVoltageTaps_LilShah", f"Tap_{i:02d}", "fault") for i in taps),
             *(derived("BPSTemperatureTaps_LilShah", f"Tap_{i:02d}", "fault") for i in taps)]),
     ]

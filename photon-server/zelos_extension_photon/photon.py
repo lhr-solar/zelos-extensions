@@ -58,7 +58,9 @@ class CatalogSession:
 
 
 class PhotonClient:
-    def __init__(self, base_url: str, password: str, *, timeout_s: float = 20.0, retries: int = 3) -> None:
+    def __init__(self, base_url: str, password: str, *, timeout_s: float = 20.0, retries: int = 3,
+                 busy_wait_s: float = 120.0) -> None:
+        self.busy_wait_s = busy_wait_s
         if not password:
             raise PhotonError("Photon password is not set. Add it in the Photon extension settings.")
         self.base_url = base_url.rstrip("/")
@@ -116,21 +118,41 @@ class PhotonClient:
 
     def stream_rows(self, session_id: str, from_ms: int, to_ms: int, level: int,
                     signals: list[str] | None = None) -> Iterator[Row]:
-        """Stream one window. Retries the whole window on a connection error before any row was read."""
+        """Stream one window.
+
+        - Photon runs one export at a time and answers others with HTTP 503 "export busy" (seen when two
+          teammates load at once); wait for the slot, backing off, for up to `busy_wait_s`.
+        - A session with nothing stored in the window can come back as an empty body: that is no rows,
+          not an error.
+        - A connection error before any row was read retries the whole window.
+        """
         params = {"session": session_id, "from": from_ms, "to": to_ms, "level": level,
                   "signals": ",".join(signals) if signals else "all"}
         last: Exception | None = None
-        for attempt in range(1, self.retries + 1):
+        failures = busy = 0
+        busy_until = time.monotonic() + self.busy_wait_s
+        while True:
             yielded = False
             try:
                 with self._http.get(f"{self.base_url}/export.csv", params=params, stream=True,
                                     timeout=(self.timeout_s, 120)) as r:
                     if r.status_code == 401:
                         raise PhotonError("Photon refused the password (HTTP 401)")
+                    if r.status_code == 503:
+                        busy += 1
+                        if time.monotonic() >= busy_until:
+                            raise PhotonError(f"Photon stayed busy with another export for {self.busy_wait_s:.0f} s "
+                                              "(HTTP 503). Someone else is probably loading; try again shortly.")
+                        if busy == 1:
+                            logger.info("Photon is busy with another export; waiting for it")
+                        time.sleep(min(0.5 * busy, 3.0))
+                        continue
                     if r.status_code != 200:
                         raise PhotonError(f"export.csv {r.status_code}: {r.text[:200]}")
                     lines = r.iter_lines()
                     header = next(lines, b"")
+                    if not header.strip():
+                        return  # empty export: nothing stored in this window
                     if not header.startswith(b"t_ms,message,signal"):
                         raise PhotonError(f"Unexpected export.csv header: {header[:80]!r}")
                     for line in lines:
@@ -144,10 +166,12 @@ class PhotonClient:
             except requests.RequestException as e:
                 if yielded:
                     raise PhotonError(f"Photon export broke mid-stream: {e}") from e
+                failures += 1
                 last = e
-                logger.warning("export.csv attempt %d/%d failed: %s", attempt, self.retries, e)
-                time.sleep(min(2.0 * attempt, 5.0))
-        raise PhotonError(f"Photon export failed after {self.retries} attempts: {last}")
+                logger.warning("export.csv attempt %d/%d failed: %s", failures, self.retries, e)
+                if failures >= self.retries:
+                    raise PhotonError(f"Photon export failed after {self.retries} attempts: {last}") from e
+                time.sleep(min(2.0 * failures, 5.0))
 
 
 def parse_catalog(obj: dict[str, Any]) -> list[CatalogSession]:
