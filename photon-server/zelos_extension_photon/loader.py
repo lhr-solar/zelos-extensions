@@ -49,7 +49,8 @@ CAN_MESSAGE_EVENT_TYPE = "zelos.can.message.v1"
 # 3: MPPTPower_LilShah (MPPT input/output power) computed per raw frame.
 # 4: DBC value tables (labels) on BPS status/command fields.
 # 5: Speed_LilShah (wheel and vehicle speed in mph) computed per raw frame.
-TRACE_FORMAT = 5
+# 6: DBC value tables on Dash Controls fields (driver switches, pedal/pump/steering faults, cameras).
+TRACE_FORMAT = 6
 
 
 @dataclass(frozen=True)

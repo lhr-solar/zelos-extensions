@@ -90,6 +90,16 @@ Notes on the data:
 
 Rebuild the tab with `python photon-server/tools/add_dynamics_tab.py`. It replaces only the Dynamics tab.
 
+### Dash Controls: live and historical
+
+High Noon's **Dash Controls** tab is Photon's Dashboard debug page (D on Dashboard). It has:
+- **Pedals, brakes and steering:** pedal positions (main and redundant), front and rear brake pressure, steering angle, and a brake pedal vs pressure plot.
+- **Driver switches:** ignition Off/Array/Motor, gear, blinkers, hazard, horn, push-to-talk, cruise and regen.
+- **Faults:** pedal and brake-pressure faults, pump fault, steering sensor status, and camera status.
+- **Cooling:** coolant temperature, pump flow and duty, next to motor and heatsink temperature.
+
+Status fields show DBC labels ("Selected", "On", "FAULT") on Photon traces as well as live. It needs no notebook: it reads plain CAN signals. Photon does not store `LWS_Standard` (steering) or `Coolant_Temperature`, so those panels fill in live only. Rebuild with `python photon-server/tools/add_dash_controls_tab.py`.
+
 ### 3. Long jobs
 Load Session answers within 4 minutes. Anything longer keeps running in the background. Run **Job Status** to see progress and the final result, or **Cancel Job** to stop.
 
