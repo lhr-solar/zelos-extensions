@@ -48,7 +48,8 @@ CAN_MESSAGE_EVENT_TYPE = "zelos.can.message.v1"
 # 2: array messages read raw and split per slot; frames sharing a timestamp no longer dropped.
 # 3: MPPTPower_LilShah (MPPT input/output power) computed per raw frame.
 # 4: DBC value tables (labels) on BPS status/command fields.
-TRACE_FORMAT = 4
+# 5: Speed_LilShah (wheel and vehicle speed in mph) computed per raw frame.
+TRACE_FORMAT = 5
 
 
 @dataclass(frozen=True)

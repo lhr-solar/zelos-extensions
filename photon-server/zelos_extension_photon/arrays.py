@@ -16,6 +16,7 @@ the way the "PDU Channel Live Splitter LilShah DBC" notebook does for live CAN d
     BPSTempADCTaps_LilShah/Tap_NN         adc (raw thermistor reading)
     MPPTPower_LilShah/Input, /Output      MPPT_A/B/C [W] = voltage * current (not an array, but computed
                                           per raw frame the same way, as the "MPPT Power" notebook does)
+    Speed_LilShah/Speed                   wheel_FL, wheel_FR, vehicle [mph] (computed, like MPPT power)
 
 Photon's 1 s and 100 ms levels average each signal over a bucket, including the index (a 1 s
 `HSS_Channel_idx` of 13.5 mixes channels), so these messages are always read raw and then thinned
@@ -253,11 +254,43 @@ class MpptPowerDeriver(ArraySplitter):
         return out
 
 
+WHEEL_DIAMETER_IN = 21.56  # rolling diameter Photon uses for wheel mph (photon-mono docs/mechanical/dynamics.md)
+MPH_PER_RPM = math.pi * WHEEL_DIAMETER_IN * 60 / 63_360
+MPH_PER_MPS = 3600 / 1609.344
+
+
+class SpeedDeriver(ArraySplitter):
+    """Speeds in mph, as Photon's Dynamics and Pit screens show them.
+
+    Written as `Speed_LilShah/Speed` with `wheel_FL`, `wheel_FR` (wheel rpm x 21.56 in rolling diameter) and
+    `vehicle` (motor-controller `MC_VehicleVelocity`, m/s). They are different speeds; each frame fills its
+    own field. The "Speed Live LilShah DBC" notebook computes the same fields from live CAN.
+    """
+
+    index_signal, slots, slot_name, replaces_message = None, 1, "Speed", False
+    SOURCE, EVENT = "Speed_LilShah", "Speed"
+    INPUTS = {"WheelRPM_FL": ("RPM", "wheel_FL", MPH_PER_RPM), "WheelRPM_FR": ("RPM", "wheel_FR", MPH_PER_RPM),
+              "MC_VelocityMeasurement": ("MC_VehicleVelocity", "vehicle", MPH_PER_MPS)}
+
+    def __init__(self, message: str) -> None:
+        super().__init__()
+        self.message = message
+        self.signal, self.field, self.scale = self.INPUTS[message]
+
+    def sources(self):
+        return {self.SOURCE: {self.EVENT: [F(f, DataType.Float64, "mph") for _, f, _ in self.INPUTS.values()]}}
+
+    def split(self, t_ns, idx, v):
+        x = v.get(self.signal)
+        return [] if x is None else [(self.SOURCE, (t_ns, self.EVENT, {self.field: float(x) * self.scale}))]
+
+
 SPLITTERS: dict[str, Any] = {
     s.message: s for s in (PduSplitter, BpsVoltageSplitter, BpsTemperatureSplitter, BpsTempAdcSplitter)}
 ARRAY_MESSAGES = frozenset(SPLITTERS)  # indexed messages: averaged rows are useless, rebuilt from raw
 COMPUTED: dict[str, Any] = {f"MPPT_{u}_PowerMeasurements": (lambda u=u: MpptPowerDeriver(u))
                             for u in MpptPowerDeriver.UNITS}
+COMPUTED.update({m: (lambda m=m: SpeedDeriver(m)) for m in SpeedDeriver.INPUTS})
 DERIVED_MESSAGES = ARRAY_MESSAGES | frozenset(COMPUTED)  # everything read raw for derived sources
 
 

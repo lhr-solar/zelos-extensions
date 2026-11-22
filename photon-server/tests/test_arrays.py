@@ -265,3 +265,26 @@ def test_status_fields_get_dbc_labels():
     assert add_value_tables(src, schema, can_naming()) == 2
     assert src.tables[("CarCAN/BPS_Status", "BPS_Fault")][4] == "Overtemperature"
     assert src.tables[("CarCAN/BPS_Status", "HV_Plus_Contactor_State")] == {0: "Open", 1: "Closed"}
+
+
+def test_speed_in_mph_matches_photon():
+    from zelos_extension_photon.arrays import SpeedDeriver
+
+    # 500 rpm on a 21.56 in wheel = 32.07 mph; 10 m/s = 22.37 mph
+    assert [(s, (t, e, {k: round(v, 2) for k, v in f.items()}))
+            for s, (t, e, f) in SpeedDeriver("WheelRPM_FL").split(7, 0, {"RPM": 500.0, "Timestamp": 3.0})] == [
+        ("Speed_LilShah", (7, "Speed", {"wheel_FL": 32.07}))]
+    assert round(SpeedDeriver("MC_VelocityMeasurement").split(7, 0, {"MC_VehicleVelocity": 10.0})[0][1][2]["vehicle"],
+                 2) == 22.37
+    assert SpeedDeriver("WheelRPM_FR").split(7, 0, {"Timestamp": 1.0}) == []
+    events = SpeedDeriver("WheelRPM_FR").sources()["Speed_LilShah"]
+    assert [(f.name, f.unit) for f in events["Speed"]] == [("wheel_FL", "mph"), ("wheel_FR", "mph"), ("vehicle", "mph")]
+
+
+def test_write_trace_includes_speed(tmp_path):
+    rows = [Row(500, "WheelRPM_FL", "RPM", "rpm", 500.0), Row(500, "WheelRPM_FR", "RPM", "rpm", 510.0),
+            Row(600, "MC_VelocityMeasurement", "MC_VehicleVelocity", "m/s", 14.0),
+            Row(600, "MC_VelocityMeasurement", "MC_MotorVelocity", "rpm", 700.0)]
+    client = FakeClient({5: rows, 2: rows, 0: rows})
+    out = write_trace(client, S, Window(0, 4000), 2, None, tmp_path / "t.trz", Progress())
+    assert out["split_sources"] == ["Speed_LilShah"] and out["split_records"] == 3

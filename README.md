@@ -65,6 +65,7 @@ By default it uploads the session to **Zelos Cloud** as a trace **tagged `Photon
 | `BPSTemperatureOverall_LilShah` | `Overall` | the same summary for temperature |
 | `BPSTempADCTaps_LilShah` | `Tap_00`–`Tap_31` | adc (raw thermistor reading) |
 | `MPPTPower_LilShah` | `Input`, `Output` | MPPT_A, MPPT_B, MPPT_C (W) = voltage × current |
+| `Speed_LilShah` | `Speed` | wheel_FL, wheel_FR (mph, from wheel rpm on a 21.56 in wheel), vehicle (mph, from `MC_VehicleVelocity`) |
 
 Channel names and fault labels come from the lilShah DBC. MPPT power is computed from voltage and current in the same raw frame, so the derived data lives inside the trace. Notebooks that write derived data with old timestamps put it in the live workspace, where Zelos deletes it within a minute. These messages are always read from Photon's raw data, because its 1 s and 100 ms data averages the channel index across slots. At those resolutions each channel or tap keeps its last value per second (or per 100 ms).
 
@@ -74,6 +75,20 @@ High Noon's **Battery** tab shows the pack (voltage, average temperature, precha
 
 - **Historical:** load any session with Photon. The trace already carries everything the tab needs, with status codes shown as DBC labels ("Closed", "Overtemperature").
 - **Live:** with the CAN extension running, open the **BPS Tap Live Splitter LilShah DBC** notebook (in `photon-server/notebooks/`; copy it into your *Documents/Zelos Notebooks* folder) and run it. It splits the live battery arrays into the same sources Photon traces use and keeps going in the background, so the same tab fills in live. The PDU Channel Live Splitter does the same for LV Power Draw.
+
+### Dynamics: live and historical
+
+High Noon's **Dynamics** tab is Photon's Mechanical/Dynamics screens: speed in mph (vehicle and front wheels), body and corner acceleration per axis (X, Y, Z for body, FL and FR), body yaw rate, front gyros, driver input (throttle, both brake pressures, steering), suspension travel, wheel rpm, all four suspension channels per corner, and IMU temperatures.
+
+- **Historical:** load any session with Photon. The trace carries the sensor messages and `Speed_LilShah`. Steering angle stays empty because Photon does not store `LWS_Standard`.
+- **Live:** the IMU, suspension and wheel messages (VCAT sensor boards) are in none of the Sharepoint DBCs. Add `photon-server/dbc/VCAT-Sensors.dbc` to the CAN extension's database files (Explorer → EXTENSIONS → gear on CAN → bus → database files). It holds those 23 messages from Photon's DBC, with their extended IDs flagged. Then run the **Speed Live LilShah DBC** notebook for the mph signals.
+
+Notes on the data:
+- **Accel X reads gravity:** the body IMU sits near −1 g on X while driving, so X is not longitudinal as Photon labels it. The tab shows the axes by name until the mounting is confirmed.
+- **Suspension is raw counts:** SUS_Data is in ADC counts (0–4095), not mm.
+- **Front gyros are uncalibrated:** FR Gyro_Z has a large offset (about 69 °/s at rest). In the 2026-07-23 recording WheelRPM_FR reads 0 while the car moves.
+
+Rebuild the tab with `python photon-server/tools/add_dynamics_tab.py`. It replaces only the Dynamics tab.
 
 ### 3. Long jobs
 Load Session answers within 4 minutes. Anything longer keeps running in the background. Run **Job Status** to see progress and the final result, or **Cancel Job** to stop.
