@@ -192,14 +192,12 @@ def _parse_list(text: str | None) -> list[str]:
     return [p.strip() for p in (text or "").replace("\n", ",").split(",") if p.strip()]
 
 
-def _selection_fields(func):
-    """Day -> session dropdowns plus resolution/window/signal fields shared by Load and Upload."""
-    func = action.boolean("allow_large", title="Allow large transfers", required=False, default=False,
-                          description=f"Load more than about {LARGE_MB / 1000:.1f} GB of CSV. "
-                                      "Raw data for a whole session can be several GB.")(func)
-    func = action.text("signals", title="Signals", required=False,
-                       description="Optional comma-separated Message.Signal names (up to 256). "
-                                   "Empty loads every signal.")(func)
+# Fields render in decorator order, outermost first: the helpers below wrap the advanced fields first
+# so that day and session always sit at the top of the form.
+
+
+def _core_fields(func):
+    """The everyday choices: day -> session, resolution and an optional window."""
     func = action.number("duration_min", title="Duration (min)", required=False, minimum=0,
                          description="Minutes to load. Empty or 0 loads to the end of the session.")(func)
     func = action.number("start_offset_min", title="Start offset (min)", required=False, minimum=0,
@@ -211,6 +209,32 @@ def _selection_fields(func):
                          description="Photon TSDB session (id | local start, length, samples).")(func)
     func = action.select("day", title="Day", choices=_day_choices, required=False,
                          description="Pick a day to narrow the session list.")(func)
+    return func
+
+
+def _advanced_fields(func):
+    """Everything else, for Load Session (Advanced)."""
+    func = action.boolean("new_upload", title="Upload again", required=False, default=False,
+                          description="Zelos Cloud only: upload a fresh trace even if this laptop already "
+                                      "uploaded this one.")(func)
+    func = action.boolean("open_in_app", title="Open in Zelos when done", required=False, default=True,
+                          description="Zelos Cloud only.")(func)
+    func = action.text("extra_tags", title="Extra tags", required=False,
+                       description=f"Zelos Cloud only: comma-separated existing org tags, added to '{PHOTON_TAG}'."
+                       )(func)
+    func = action.text("name", title="Trace name", required=False,
+                       description="Zelos Cloud only. Defaults to '<local date time> <session id> (<resolution>)'."
+                       )(func)
+    func = action.boolean("allow_large", title="Allow large transfers", required=False, default=False,
+                          description=f"Load more than about {LARGE_MB / 1000:.1f} GB of CSV. "
+                                      "Raw data for a whole session can be several GB.")(func)
+    func = action.text("signals", title="Signals", required=False,
+                       description="Optional comma-separated Message.Signal names (up to 256). "
+                                   "Empty loads every signal.")(func)
+    func = action.select("destination", title="Destination", choices=DESTINATIONS, required=False,
+                         description="Zelos Cloud (default): shared with the lhrs org, tagged Photon. Trace file: a "
+                                     f"local .trz. Live workspace: only data from the last {LIVE_MAX_AGE_H:g} hours."
+                         )(func)
     return func
 
 
@@ -253,31 +277,10 @@ def list_sessions(day: str | None = None, limit_days: int = 10, refresh: bool = 
             "total_sessions": sum(len(v) for v in days.values())}
 
 
-@action("Load Session",
-        f"Loads a Photon session (or a window of it) into Zelos. By default it uploads it to Zelos Cloud as a trace "
-        f"tagged '{PHOTON_TAG}' and opens it in the app; loading the same thing again on this laptop reuses that "
-        "trace. 'Trace file' saves a local .trz instead. 'Live workspace' streams into the live view, but Zelos "
-        f"keeps live data for only about 8 hours, so that works only for data under {LIVE_MAX_AGE_H:g} h old. "
-        "Signals use the CAN extension's names (CAN/CarCAN/<Message>.<Signal>), so CAN layouts such as "
-        "High Noon work on them.",
-        timeout=1800, submit_text="Load")
-@action.boolean("new_upload", title="Upload again", required=False, default=False,
-                description="Zelos Cloud only: upload a fresh trace even if this laptop already uploaded this one.")
-@action.boolean("open_in_app", title="Open in Zelos when done", required=False, default=True,
-                description="Zelos Cloud only.")
-@action.text("extra_tags", title="Extra tags", required=False,
-             description=f"Zelos Cloud only: comma-separated existing org tags, added to '{PHOTON_TAG}'.")
-@action.text("name", title="Trace name", required=False,
-             description="Zelos Cloud only. Defaults to '<local date time> <session id> (<resolution>)'.")
-@action.select("destination", title="Destination", choices=DESTINATIONS, required=False,
-               description="Zelos Cloud (default): shared with the lhrs org, tagged Photon. Trace file: a local "
-                           f".trz. Live workspace: only data from the last {LIVE_MAX_AGE_H:g} hours.")
-@_selection_fields
-def load_session(session: str, day: str | None = None, resolution: str | None = None,
-                 start_offset_min: float | None = 0, duration_min: float | None = None,
-                 signals: str | None = None, allow_large: bool | None = False,
-                 destination: str | None = None, name: str | None = None, extra_tags: str | None = None,
-                 open_in_app: bool | None = True, new_upload: bool | None = False) -> dict[str, Any]:
+def _load(session: str, resolution: str | None = None, start_offset_min: float | None = 0,
+          duration_min: float | None = None, signals: str | None = None, allow_large: bool | None = False,
+          destination: str | None = None, name: str | None = None, extra_tags: str | None = None,
+          open_in_app: bool | None = True, new_upload: bool | None = False) -> dict[str, Any]:
     s, level, window, sig = _prepare(session, resolution, start_offset_min, duration_min, signals, allow_large)
     res_name = resolution or STATE.default_resolution
     dest = destination or DESTINATIONS[0]
@@ -334,6 +337,34 @@ def load_session(session: str, day: str | None = None, resolution: str | None = 
 def _open(org: str | None, entry: dict[str, Any]) -> bool:
     org = org or _org_from_url(entry.get("url"))
     return bool(org and entry.get("trace_id")) and bool(STATE.opener(org, entry["trace_id"]))
+
+
+@action("Load Session",
+        f"Loads a Photon session (or part of it) into Zelos: uploads it to Zelos Cloud as a trace tagged "
+        f"'{PHOTON_TAG}', opens it in the app and returns the share link. Loading the same thing again on this "
+        "laptop reopens that trace. Signals use the CAN extension's names (CAN/CarCAN/<Message>.<Signal>), so "
+        "layouts such as High Noon work on them. Load Session (Advanced) has the other options.",
+        timeout=1800, submit_text="Load")
+@_core_fields
+def load_session(session: str, day: str | None = None, resolution: str | None = None,
+                 start_offset_min: float | None = 0, duration_min: float | None = None) -> dict[str, Any]:
+    return _load(session, resolution, start_offset_min, duration_min)
+
+
+@action("Load Session (Advanced)",
+        "Load Session with every option: destination (Zelos Cloud, a local Trace file, or the Live workspace for "
+        f"data under {LIVE_MAX_AGE_H:g} h old), a signal subset, large raw transfers, trace name, extra tags, "
+        "whether to open it, and Upload again to force a fresh Cloud trace.",
+        timeout=1800, submit_text="Load")
+@_core_fields
+@_advanced_fields
+def load_session_advanced(session: str, day: str | None = None, resolution: str | None = None,
+                          start_offset_min: float | None = 0, duration_min: float | None = None,
+                          destination: str | None = None, signals: str | None = None,
+                          allow_large: bool | None = False, name: str | None = None, extra_tags: str | None = None,
+                          open_in_app: bool | None = True, new_upload: bool | None = False) -> dict[str, Any]:
+    return _load(session, resolution, start_offset_min, duration_min, signals, allow_large, destination, name,
+                 extra_tags, open_in_app, new_upload)
 
 
 @action("Job Status", "Progress of the running (or last) load or upload.", read_only=True, timeout=10)

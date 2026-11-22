@@ -25,27 +25,30 @@
 
 ## Photon: usage guide
 
-Every action runs from **ACTIONS → Photon** in the Explorer. Double-click one, or drag it onto a layout, to open it in an Action panel, then click **Execute**.
+**The easy way: the Photon tab.** Open the shared **High Noon** layout (right sidebar → **LAYOUTS** → **High Noon**, `Ctrl+J` if the sidebar is hidden) and pick its **Photon** tab. It has a full-height **Load Session** form, **Photon sessions** (List Sessions) and **Load progress** (Job Status) already in place.
+
+Actions only run in a **live** workspace, the one connected to `localhost`. While a trace is the active data source they show *"Only available in live mode"*. To run them again, switch the active data source back to `localhost` (right sidebar → **DATA SOURCES**), or reopen the live workspace from the title dropdown.
+
+You can also run any action from **ACTIONS → Photon** in the Explorer: double-click one, or drag it onto a layout, to open it in an Action panel, then click **Execute**.
 
 ### 1. Find a session
 Run **List Sessions**. It shows the stored car sessions grouped by day (newest first), with start time, length and whether video exists. You can also ask Zelos AI, for example *"List the Photon sessions from September"*. It runs this action itself.
 
 ### 2. Open a session
-Run **Load Session**:
+Run **Load Session**. It has five fields:
 - **Day**, then **Session**: the dropdowns list what Photon has.
 - **Resolution**: `1 s` for a whole session, `100 ms` for a few minutes of detail, `raw` only for short windows.
 - **Start offset / Duration** (minutes, optional): load just part of a run.
-- **Signals** (optional): `Message.Signal` names, comma-separated, to load only some signals.
 
 By default it uploads the session to **Zelos Cloud** as a trace **tagged `Photon`**, opens it in Zelos, and returns the share link. Anyone in the lhrs org can open that link, and Zelos AI can analyze the trace.
 
 **Signals use the same names as the CAN extension** (`CAN` → `CarCAN/<Message>` → `<Signal>`), so the shared **High Noon** layout and any other layout built on live PCAN data work on Photon traces unchanged. Live-workspace loads are the exception: they appear under `photon-<session id>` so they never mix with a running CAN extension.
 
-- **Load the same thing again** (same session, resolution, window and signals) and this laptop reopens the trace it already uploaded instead of making a duplicate. Tick **Upload again** to force a fresh trace.
-- **Trace name / Extra tags** (optional): rename the trace, or add existing org tags next to `Photon`.
+- **Load the same thing again** (same session, resolution, window and signals) and this laptop reopens the trace it already uploaded instead of making a duplicate. To force a fresh trace, use **Load Session (Advanced)** → **Upload again**.
+- **Load Session (Advanced)** has the other options: a **Signals** subset (`Message.Signal` names), **Trace name**, **Extra tags** (existing org tags next to `Photon`), **Open in Zelos when done**, **Upload again**, **Allow large transfers**, and **Destination**.
 - Zelos can't search the Cloud for existing traces, so a teammate loading the same session gets their own copy. Before loading, check console2 → Traces (filter by the `Photon` tag) for an existing one.
 
-**Other destinations** (the **Destination** field):
+**Other destinations** (the **Destination** field in Load Session (Advanced)):
 - **Trace file**: saves a private `.trz` to **Documents/Photon Traces**. Open it with **Open trace** on Home, or **DATA SOURCES → Add trace → File** in the right sidebar (`Ctrl+J`).
 - **Live workspace (recent data only)**: streams into the live view, but only for data from the last 7.5 hours (Zelos drops older live data within a minute).
 
@@ -59,8 +62,8 @@ Load Session answers within 4 minutes. Anything longer keeps running in the back
 | Actions fail with *"Photon password is not set"* or *"refused the password"* | Re-enter the password under EXTENSIONS → Photon → gear, then **Save & Restart** |
 | Load fails with *"no 'Photon' tag"* | An lhrs org owner must create the `Photon` tag once in console2.zeloscloud.io → Tags |
 | Load fails with a sign-in or storage error | Sign in to the lhrs org in Zelos. If the org's Cloud storage is full, ask an owner, or use Destination **Trace file** |
-| A reused trace was deleted from the Cloud | Load again with **Upload again** ticked |
-| High Noon panels are empty on a Photon trace | Check that the extension's **CAN source name** / **CAN bus name** settings match your CAN extension (defaults `CAN` / `CarCAN`). Traces uploaded before this naming (signals under `photon/`) need **Upload again** |
+| A reused trace was deleted from the Cloud | Load again with **Load Session (Advanced)** → **Upload again** |
+| High Noon panels are empty on a Photon trace | Check that the extension's **CAN source name** / **CAN bus name** settings match your CAN extension (defaults `CAN` / `CarCAN`). Traces uploaded before this naming (signals under `photon/`) need **Load Session (Advanced)** → **Upload again** |
 | *"roughly N GB of Photon data"* | Pick a coarser resolution or a shorter window, or tick **Allow large transfers** |
 | No EXTENSIONS or ACTIONS section | You're viewing a trace. Switch to the live workspace connected to `localhost` |
 | A signal stops early at `1 s` / `100 ms` | Photon's rollup data can end before its raw data. Load that window at `raw` |

@@ -36,9 +36,9 @@ def test_registered_actions():
             names.append(name)
 
     actions.register_actions(Reg())
-    assert names == ["cancel_job", "job_status", "list_sessions", "load_session"]
+    assert names == ["cancel_job", "job_status", "list_sessions", "load_session", "load_session_advanced"]
     assert actions.list_sessions._action.read_only and actions.job_status._action.read_only
-    assert not actions.load_session._action.read_only
+    assert not actions.load_session._action.read_only and not actions.load_session_advanced._action.read_only
 
 
 def test_list_sessions_groups_days():
@@ -130,7 +130,7 @@ def test_trace_paths_are_readable_and_distinct(catalog, tmp_path):
 def test_live_destination_refuses_old_data(monkeypatch):
     monkeypatch.setattr(STATE, "run_job", lambda *a, **k: pytest.fail("should not start a job"))
     with pytest.raises(ValueError, match="Zelos Cloud or a Trace file instead"):
-        actions.load_session("20260723-164704-00", destination=actions.DEST_LIVE)
+        actions.load_session_advanced("20260723-164704-00", destination=actions.DEST_LIVE)
 
 
 def test_load_to_a_trace_file(monkeypatch, tmp_path):
@@ -144,7 +144,7 @@ def test_load_to_a_trace_file(monkeypatch, tmp_path):
 
     monkeypatch.setattr(actions, "write_trace", fake_write)
     monkeypatch.setattr(STATE, "client", lambda: None)
-    out = actions.load_session("20261017-012401-00 | label", resolution="100 ms", destination="Trace file")
+    out = actions.load_session_advanced("20261017-012401-00 | label", resolution="100 ms", destination="Trace file")
     assert out["destination"] == "trace file" and written["level"] == 1
     assert out["path"] == str(written["path"]) and written["path"].parent == tmp_path
 
@@ -187,19 +187,19 @@ def test_loading_the_same_thing_again_reuses_the_trace(fake_cloud):
     assert len(fake_cloud["uploads"]) == 3
     assert fake_cloud["uploads"][2]["name"].endswith("(1 s) from 20:25 2 min")
     # Upload again forces a fresh trace
-    fresh = actions.load_session("20261017-012401-00 | label", new_upload=True)
+    fresh = actions.load_session_advanced("20261017-012401-00 | label", new_upload=True)
     assert not fresh["reused"] and fresh["trace_id"] == "t4"
 
 
 def test_cloud_load_without_opening_and_with_extra_tags(fake_cloud):
-    out = actions.load_session("20261017-012401-00 | label", open_in_app=False, extra_tags="Brainerd, dyno")
+    out = actions.load_session_advanced("20261017-012401-00 | label", open_in_app=False, extra_tags="Brainerd, dyno")
     assert not out["opened_in_app"] and fake_cloud["opened"] == []
     assert out["tags"] == ["Photon", "Brainerd", "dyno"]
 
 
 def test_unknown_destination_is_refused(fake_cloud):
     with pytest.raises(ValueError, match="Unknown destination"):
-        actions.load_session("20261017-012401-00 | label", destination="Somewhere")
+        actions.load_session_advanced("20261017-012401-00 | label", destination="Somewhere")
 
 
 def test_loads_use_the_can_extensions_names(fake_cloud):
@@ -210,3 +210,24 @@ def test_loads_use_the_can_extensions_names(fake_cloud):
     actions.load_session("20261017-012401-00 | label")
     assert fake_cloud["naming"][1].bus == "Car CAN 2"
     assert len(fake_cloud["uploads"]) == 2  # a different naming is a different trace
+
+
+def _fields(fn):
+    import json
+
+    schema = fn._action.to_schema_json({}) if hasattr(fn._action, "to_schema_json") else None
+    props = json.loads(schema)["properties"] if schema else fn._action.to_schema({})["properties"]
+    return list(props)
+
+
+def test_short_form_has_only_the_everyday_fields_in_order():
+    assert _fields(actions.load_session) == ["day", "session", "resolution", "start_offset_min", "duration_min"]
+    adv = _fields(actions.load_session_advanced)
+    assert adv[:5] == ["day", "session", "resolution", "start_offset_min", "duration_min"]
+    assert adv[5] == "destination" and set(adv[5:]) == {"destination", "signals", "allow_large", "name",
+                                                        "extra_tags", "open_in_app", "new_upload"}
+
+
+def test_short_load_goes_to_cloud_and_opens(fake_cloud):
+    out = actions.load_session("20261017-012401-00 | label", resolution="100 ms", start_offset_min=1, duration_min=2)
+    assert out["destination"] == "zelos cloud" and out["opened_in_app"] and fake_cloud["uploads"][0]["level"] == 1

@@ -12,7 +12,8 @@ It only reads Photon, through the same endpoints photon.html uses. It never chan
 | Action | What it does | Zelos AI |
 |---|---|---|
 | **List Sessions** | Lists Photon's stored sessions, grouped by local day (newest first), with start time, length, samples and whether video exists | Runs without asking (read-only) |
-| **Load Session** | Pick a day and a session, plus optional resolution, start offset, duration and signals. By default it builds the trace, seals it as TRZ2, uploads it to Zelos Cloud **tagged `Photon`** (plus any extra tags), opens it in the app and returns the share link. Loading the same thing again on this laptop reuses that trace. *Destination* can be *Trace file* (a local `.trz` in *Documents/Photon Traces*) or *Live workspace* (recent data only). Signals use the CAN extension's names (`CAN` / `CarCAN/<Message>` / `<Signal>`, event type `zelos.can.message.v1`), so CAN layouts such as High Noon work on Photon traces | Asks first |
+| **Load Session** | Pick a day and a session, plus optional resolution, start offset and duration. It builds the trace, seals it as TRZ2, uploads it to Zelos Cloud **tagged `Photon`** (plus any extra tags), opens it in the app and returns the share link. Loading the same thing again on this laptop reuses that trace. Signals use the CAN extension's names (`CAN` / `CarCAN/<Message>` / `<Signal>`, event type `zelos.can.message.v1`), so CAN layouts such as High Noon work on Photon traces | Asks first |
+| **Load Session (Advanced)** | Load Session plus every other option: *Destination* (*Zelos Cloud*, a local *Trace file* in *Documents/Photon Traces*, or the *Live workspace* for recent data), a signal subset, *Allow large transfers*, trace name, extra tags, open in app, *Upload again* | Asks first |
 | **Job Status** | Progress and the result of the running or last load/upload | Read-only |
 | **Cancel Job** | Stops the running load or upload after its current chunk | Asks first |
 
@@ -41,6 +42,10 @@ Zelos has no API to list or search Cloud traces, so the extension can't tell whe
 ### The Photon tag
 
 Zelos never creates tags on upload. If a Cloud load fails with *"Zelos Cloud has no 'Photon' tag"*, an org owner needs to create the tag once in [console2.zeloscloud.io](https://console2.zeloscloud.io) → Tags.
+
+### The Photon tab in High Noon
+
+Zelos opens an action dragged from the Explorer as a short panel at the bottom of the tab, and no extension or action setting controls that height. So the shared **High Noon** layout ships a **Photon** tab: Load Session at full height on the left, List Sessions and Job Status on the right. `tools/add_photon_tab.py` adds or refreshes that tab in any layout (`--layout NAME`, `--dry-run`). It only replaces the tab named *Photon*, and each run is a new layout version, so `agent.layouts.restore(id, version)` undoes it.
 
 ## Settings
 
